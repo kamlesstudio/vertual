@@ -1,0 +1,79 @@
+{% extends 'main.html' %}
+
+{% block content %}
+
+  <!-- Main Section -->
+  <main class="home">
+    <section class="hero-section text-center">
+      <div class="container container--narrow">
+        <div class="hero-section__box">
+          <h2>CONNECT WITH <span>Vertual Bazaar(VerB)</span></h2>
+          <h2>FROM AROUND THE WORLD</h2>
+        </div>
+
+        <div class="hero-section__search">
+          <form id = "searchForm" class="form" action="{% url 'profiles' %}" method="get">
+            <div class="form__field">
+              <label for="formInput#search">Search Developers </label>
+              <input class="input input--text" id="formInput#search" type="text" name="search_query"
+                value ="{{search_query}}" placeholder="Enter shop/skill  name" />
+                <input class="input input--text" style="width:150px" id="formInput#search1" type="text" name="search_query1"
+                value="{{search_query1}}" placeholder="Enter Pin number " />
+            </div>
+
+            <input class="btn btn--sub btn--lg" type="submit" value="Search" />
+          </form>
+        </div>
+      </div>
+    </section>
+    <!-- Search Result: DevList -->
+     <section class="devlist">
+      <div class="container">
+        <div class="grid grid--three">
+<style>
+    .tag--main, .tag--main > small {
+    background: #323660;
+    color: #fff;
+    font-weight: 500;
+}
+</style>
+<!-- {% for profile in profiles %}
+<img class="avatar avatar--md" src="{{ profile.profile_image.url }}" alt="image" />
+{% endfor %} -->
+        {% for profile in profiles %}
+          <div class="column card">
+            <div class="dev">
+              <a href="{% url 'user-profile' profile.id %}" class="card__body">
+                <div class="dev__profile">
+                  <img class="avatar avatar--md" src="{{ profile.profile_image.url }}" alt="image" />
+                  <div class="dev__meta">
+                    <h3 style="color:#d94562;;font-weight: 600;">{{ profile.shop_name |capfirst}}</h3>
+                  <p style="color:#ff0162; font-style:italic;font-weight:500;">{{profile.pin_number}} ,<span style="color:#6f01ff; font-style:italic">
+                    {{profile.state}}</span> </p>
+                    <h5 style="color:#ff5e01e7; font-style:italic">{{ profile.short_intro | slice:"150" }}</h5>
+                  </div>
+                </div>
+                <p class="dev__info" style="font-weight:500;">{{ profile.bio | slice:"200"}}</p>
+                <div class="dev__skills">
+
+                {% for skill in profile.skill_set.all|slice:"6" %}
+                  <span class="tag tag--pill tag--main">
+                    <small style="background: #333646;">{{skill}}</small>
+                  </span>
+                  {% endfor %}
+
+                </div>
+              </a>
+            </div>
+            <div>
+              <p style="padding:3px; color:#6a73d1; font-weight:600">{{profile.address}}</p>
+            </div>
+        </div>
+       {% endfor %}
+        </div>
+      </div>
+    </section>
+    {% include 'pagination.html' with querysets=profiles custom_range=custom_range %}
+  </main>
+
+{% endblock%}

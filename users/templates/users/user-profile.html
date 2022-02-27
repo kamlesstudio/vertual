@@ -1,0 +1,360 @@
+{% extends 'main.html' %}
+
+{% block content %}
+{% if publish %}
+<style>
+  body {
+    font-family: 'Open sans', sans-serif;
+    font-weight: 300;
+    background-image: linear-gradient(to bottom right, #00F490, #00BBC9);
+  }
+
+  .switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+  }
+
+  .switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+
+  .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    -webkit-transition: .4s;
+    transition: .4s;
+  }
+
+  .slider:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+  }
+
+  input:checked+.slider {
+    background-color: #2196F3;
+  }
+
+  input:focus+.slider {
+    box-shadow: 0 0 1px #2196F3;
+  }
+
+  input:checked+.slider:before {
+    -webkit-transform: translateX(26px);
+    -ms-transform: translateX(26px);
+    transform: translateX(26px);
+  }
+
+  /* Rounded sliders */
+  .slider.round {
+    border-radius: 34px;
+  }
+
+  .slider.round:before {
+    border-radius: 50%;
+  }
+
+  .switch1 {
+    position: relative;
+    display: block;
+    vertical-align: top;
+    width: 100px;
+    height: 30px;
+    padding: 3px;
+    margin: 0 10px 10px 0;
+    background: linear-gradient(to bottom, #eeeeee, #FFFFFF 25px);
+    background-image: -webkit-linear-gradient(top, #eeeeee, #FFFFFF 25px);
+    border-radius: 18px;
+    box-shadow: inset 0 -1px white, inset 0 1px 1px rgba(0, 0, 0, 0.05);
+    cursor: pointer;
+    box-sizing: content-box;
+  }
+
+  .switch-input1 {
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    box-sizing: content-box;
+  }
+
+  .switch-label1 {
+    position: relative;
+    display: block;
+    height: inherit;
+    font-size: 10px;
+    text-transform: uppercase;
+    background: #eceeef;
+    border-radius: inherit;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.12), inset 0 0 2px rgba(0, 0, 0, 0.15);
+    box-sizing: content-box;
+  }
+
+  .switch-label:before,
+  .switch-label1:after {
+    position: absolute;
+    top: 50%;
+    margin-top: -.5em;
+    line-height: 1;
+    -webkit-transition: inherit;
+    -moz-transition: inherit;
+    -o-transition: inherit;
+    transition: inherit;
+    box-sizing: content-box;
+  }
+
+  .switch-label1:before {
+    content: attr(data-off);
+    right: 11px;
+    color: #aaaaaa;
+    text-shadow: 0 1px rgba(255, 255, 255, 0.5);
+  }
+
+  .switch-label1:after {
+    content: attr(data-on);
+    left: 11px;
+    color: #FFFFFF;
+    text-shadow: 0 1px rgba(0, 0, 0, 0.2);
+    opacity: 0;
+  }
+
+  .switch-input1:checked~.switch-label1 {
+    background: greenyellow;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.15), inset 0 0 3px rgba(0, 0, 0, 0.2);
+  }
+
+  .switch-input1:checked~.switch-label1:before {
+    opacity: 0;
+  }
+
+  .switch-input1:checked~.switch-label1:after {
+    opacity: 1;
+  }
+
+  .switch-handle1 {
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    width: 28px;
+    height: 28px;
+    background: linear-gradient(to bottom, #FFFFFF 40%, #f0f0f0);
+    background-image: -webkit-linear-gradient(top, #FFFFFF 40%, #f0f0f0);
+    border-radius: 100%;
+    box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
+  }
+
+  .switch-handle1:before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin: -6px 0 0 -6px;
+    width: 12px;
+    height: 12px;
+    background: linear-gradient(to bottom, #eeeeee, #FFFFFF);
+    background-image: -webkit-linear-gradient(top, #eeeeee, #FFFFFF);
+    border-radius: 6px;
+    box-shadow: inset 0 1px rgba(0, 0, 0, 0.02);
+  }
+
+  .switch-input1:checked~.switch-handle1 {
+    left: 74px;
+    box-shadow: -1px 1px 5px rgba(0, 0, 0, 0.2);
+  }
+
+  /* Transition
+========================== */
+  .switch-label1,
+  .switch-handle1 {
+    transition: All 0.3s ease;
+    -webkit-transition: All 0.3s ease;
+    -moz-transition: All 0.3s ease;
+    -o-transition: All 0.3s ease;
+  }
+</style>
+
+<!-- Main Section -->
+<main class="profile my-md">
+  <div class="container">
+    <div class="layout">
+      <div class="column column--1of3">
+        <div class="card text-center">
+          <div class="card__body dev">
+            <img class="avatar avatar--xl" src="{{ profile.profile_image.url }}" />
+            <h2 class="dev__name">{{profile.name}}</h2>
+            <p class="dev__title">{{ profile.short_intro }}</p>
+            <p class="dev__location">Based in {{ profile.location }}</p>
+
+
+            <ul class="dev__social">
+              {% if profile.social_github %}
+              <li>
+                <a title="Github" href="{{profile.social_github}}" target="_blank"><i class="im im-github"></i></a>
+              </li>
+              {% endif %}
+
+              {% if profile.social_twitter %}
+              <li>
+                <a title="Stackoverflow" href="#" target="_blank"><i class="im im-stackoverflow"></i></a>
+              </li>
+              {% endif %}
+
+              {% if profile.social_twitter %}
+              <li>
+                <a title="Twitter" href="{{profile.social_twitter}}" target="_blank"><i class="im im-twitter"></i></a>
+              </li>
+              {% endif %}
+              {% if profile.social_linkedin %}
+              <li>
+                <a title="LinkedIn" href="{{profile.social_linkedin}}" target="_blank"><i
+                    class="im im-linkedin"></i></a>
+              </li>
+              {% endif %}
+              {% if profile.social_website %}
+              <li>
+                <a title="Personal Website" href="{{profile.social_website}}" target="_blank"><i
+                    class="im im-globe"></i></a>
+              </li>
+              {% endif %}
+
+            </ul>
+            <div class="row" style="margin-left: 40px;">
+              <p>Real Time Status:</p>
+              <label class="switch1">
+                <input class="switch-input1" type="checkbox" {% if profile.check %} checked {% endif %} />
+                <span class="switch-label1" data-on="Open" data-off="Close"></span>
+                <span class="switch-handle1"></span>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="column column--2of3">
+        <div class="devInfo">
+          <h3 class="devInfo__title">About Me</h3>
+          <p class="devInfo__about text-white ">{{profile.bio}}</p>
+
+        </div>
+        <div class="devInfo">
+          <h3 class="devInfo__title">Skills</h3>
+          <div class="devInfo__skills">
+
+            {% for skill in topskills %}
+            <div class="devSkill">
+              <h4 class="devSkill__title">{{skill.name}}</h4>
+              <p class="devSkill__info text-dark ">{{skill.description}}</p>
+            </div>
+            {% endfor %}
+            <h3 class="devInfo__subtitle">Other Skills</h3>
+            <div class="devInfo__otherSkills">
+              {% for skill in otherskills %}
+              <span class="tag tag--pill tag--sub tag--lg">
+                <small>{{skill}}</small>
+              </span>
+              {% endfor %}
+
+            </div>
+          </div>
+        </div>
+        
+        <div class="devInfo">
+          <h3 class="devInfo__title">Products</h3>
+          
+          {% for project in projects %}
+          <div class="product infinite-container">
+           
+              <div class="accordion" id="accordionExample">
+                <div class="card infinite-item">
+                  <div class="card-header" id="headingOne">
+                    <h2 class="mb-0">
+                      <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne"
+                        aria-expanded="true" aria-controls="collapseOne">
+                        <h5 class="card-title">
+                            <h3 class="project__title">{{project.title | slice:"22"}}</h3>
+                          </h5>
+          
+                      </button>
+                    </h2>
+                  </div>
+          
+                  <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
+                    <div class="card-body">
+                      <ul class="list-group list-group-horizontal-xl">
+                        <li class="list-group-item">
+                          <a href="{% url 'project' project.id %}"><img src="{{project.featured_image.url}}"
+                              style="height:220px; width: 200px;" alt="Project Thumbnail" /></a>
+          
+                        
+                        
+                          <p class="tag tag--pill tag--main ml-5">price: {{project.price}}&#8377;</p>
+                          {% if project.check %}
+                          <p class="text-dark">
+                            <span class="badge badge-success">Available</span>
+          
+                          </p>
+                          {% else %}
+                          <p class="text-dark">
+                            <span class="badge badge-pill badge-danger">Not Available</span>
+                          </p>
+                          {% endif %}
+                          <small class="text-muted">{{project.created}}</small>
+                        </li>
+                        <li class="list-group-item">
+                          <p class="card-text">{{project.description | slice:"100"}}</p>
+                          <p class="project--rating">
+                            <span style="font-weight: bold;">{{project.vote_ratio}}%</span> Postitive
+                            Feedback ({{project.vote_total}}Vote{{project.vote_total | pluralize:"s"}})
+                          </p>
+                          <p class="project__author text-dark"><span class="badge badge-info">opening-time :
+                              {{project.owner.open_time}}</span></p>
+                          <p class="project__author text-dark"><span class="badge badge-info">closing-time :
+                              {{project.owner.closed_time}}</span></p>
+                        </li>
+                        <li class="list-group-item">
+                          <div class="singleProject__toolStack ">
+                            {%for tag in project.tags.all %}
+                            <span class="tag tag--pill tag--sub tag--lg float-right">
+                              <small>{{tag}}</small>
+                            </span>
+                            {% endfor %}
+                          </div>
+                     
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+          
+          
+              </div>
+           
+            {% endfor %}
+            </div>
+            </div>
+          
+            <div class="spinner-border text-info" style="width: 5rem; height: 5rem;" role="status">
+              <span class="sr-only">Loading...</span>
+            </div>
+          
+            {% if projects.has_next %}
+            <a class="infinite-more-link" href="?page={{ projects.next_page_number }}">More</a>
+            {% endif %}
+            </main>
+        {% endif %}
+            {% endblock %}

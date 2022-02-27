@@ -1,0 +1,128 @@
+{% extends 'main.html'%}
+
+{% block content %}
+
+<style>
+  body {
+      background: rgb(219, 223, 212);
+  }
+
+  [data-tab-info] {
+      display: none;
+  }
+
+  .active[data-tab-info] {
+      display: block;
+  }
+
+  .tab-content {
+      font-size: 30px;
+      font-family: sans-serif;
+      font-weight: bold;
+      color: rgb(82, 75, 75);
+  }
+
+  .tabs {
+      font-size: 40px;
+      color: rgb(255, 255, 255);
+      display: flex;
+      margin: 0;
+  }
+
+  .tabs span {
+      background: #fff;
+      padding: 10px;
+      border: 1px solid rgb(255, 255, 255);
+  }
+
+  .tabs span:hover {
+      background: rgb(29, 185, 112);
+      cursor: pointer;
+      color: black;
+  }
+  .inbox__title, .inbox__title span {
+    font-size: 2.4rem;
+    font-weight: 700;
+    color: var(--color-sub);
+    text-transform: uppercase;
+    text-align: left;
+    margin-bottom: 3rem;
+    margin-top: 10px;
+}
+p, span, strong {
+    font-size: 1.6rem;
+    color: var(--color-text);
+    font-weight: 600;
+}
+</style>
+
+
+
+<div class="tabs">
+  <span data-tab-value="#tab_1">Inbox</span>
+  <span data-tab-value="#tab_2">OutBox</span>
+
+</div>
+
+<div class="tab-content">
+  <div class="tabs__tab active" id="tab_1" data-tab-info>
+    <div class="content-box">
+      <h3 class="inbox__title">New Messages(<span>{{unreadCount}}</span>)</h3>
+      <ul class="messages" style="background: rgb(53 53 58 / 73%);">
+        {% for message in messageRequest %}
+        {% if message.is_read == False %}
+        <li class="message message--unread">
+          {% else %}
+        <li class="message message">
+          {% endif %}
+          <a href="{% url 'message' message.id %}">
+            <span class="message__author" style="color: #eee;">{{message.name}}</span>
+            <span class="message__subject" style="color: #eee;">{{message.subject}}</span>
+            <span class="message__date" style="color: #eee;">{{message.created}}</span>
+          </a>
+        </li>
+
+        {% endfor %}
+
+      </ul>
+    </div>
+
+  </div>
+  <div class="tabs__tab" id="tab_2" data-tab-info>
+    <div class="content-box">
+
+      {% for i in inbox %}
+        <div class="card mb-3">
+          <img src="{{ i.banner_image.url }}" class="card-img-top" alt="...">
+          <div class="card-body">
+            <h5 class="card-title">Subject : {{i.subject}}</h5>
+            <p class="card-text">Content : {{i.body}}</p>
+            <p class="card-text">{{i.pin_number}}</p>
+            <p class="card-text"><small class="text-muted">{{i.created}}</small></p>
+          </div>
+        </div>
+      {% endfor %}
+
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+  const tabs = document.querySelectorAll('[data-tab-value]')
+  const tabInfos = document.querySelectorAll('[data-tab-info]')
+
+  tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+          const target = document
+              .querySelector(tab.dataset.tabValue);
+
+          tabInfos.forEach(tabInfo => {
+              tabInfo.classList.remove('active')
+          })
+          target.classList.add('active');
+      })
+  })
+</script>
+
+
+</main>
+{% endblock %}

@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Document</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.0/css/all.min.css" />
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous" />
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.4.1.min.js"
+    integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+
+  <link rel="stylesheet" href="{% static 'users/style.css' %}" />
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+  <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v2.6.1/mapbox-gl.js'></script>
+  <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v2.6.1/mapbox-gl.css' rel='stylesheet' />
+</head>
+{% if publish %}
+<style>
+  .switch1 {
+    position: relative;
+    display: block;
+    vertical-align: top;
+    width: 100px;
+    height: 30px;
+    padding: 3px;
+    margin: 0 10px 10px 0;
+    background: linear-gradient(to bottom, #eeeeee, #ffffff 25px);
+    background-image: -webkit-linear-gradient(top, #eeeeee, #ffffff 25px);
+    border-radius: 18px;
+    box-shadow: inset 0 -1px white, inset 0 1px 1px rgba(0, 0, 0, 0.05);
+    cursor: pointer;
+    box-sizing: content-box;
+  }
+
+  .switch-input1 {
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    box-sizing: content-box;
+  }
+
+  .switch-label1 {
+    position: relative;
+    display: block;
+    height: inherit;
+    font-size: 10px;
+    text-transform: uppercase;
+    background: #eceeef;
+    border-radius: inherit;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.12),
+      inset 0 0 2px rgba(0, 0, 0, 0.15);
+    box-sizing: content-box;
+  }
+
+  .switch-label:before,
+  .switch-label1:after {
+    position: absolute;
+    top: 50%;
+    margin-top: -0.5em;
+    line-height: 1;
+    -webkit-transition: inherit;
+    -moz-transition: inherit;
+    -o-transition: inherit;
+    transition: inherit;
+    box-sizing: content-box;
+  }
+
+  .switch-label1:before {
+    content: attr(data-off);
+    right: 11px;
+    color: #aaaaaa;
+    text-shadow: 0 1px rgba(255, 255, 255, 0.5);
+  }
+
+  .switch-label1:after {
+    content: attr(data-on);
+    left: 11px;
+    color: #ffffff;
+    text-shadow: 0 1px rgba(0, 0, 0, 0.2);
+    opacity: 0;
+  }
+
+  .switch-input1:checked~.switch-label1 {
+    background: greenyellow;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.15),
+      inset 0 0 3px rgba(0, 0, 0, 0.2);
+  }
+
+  .switch-input1:checked~.switch-label1:before {
+    opacity: 0;
+  }
+
+  .switch-input1:checked~.switch-label1:after {
+    opacity: 1;
+  }
+
+  .switch-handle1 {
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    width: 28px;
+    height: 28px;
+    background: linear-gradient(to bottom, #ffffff 40%, #f0f0f0);
+    background-image: -webkit-linear-gradient(top, #ffffff 40%, #f0f0f0);
+    border-radius: 100%;
+    box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
+  }
+
+  .switch-handle1:before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin: -6px 0 0 -6px;
+    width: 12px;
+    height: 12px;
+    background: linear-gradient(to bottom, #eeeeee, #ffffff);
+    background-image: -webkit-linear-gradient(top, #eeeeee, #ffffff);
+    border-radius: 6px;
+    box-shadow: inset 0 1px rgba(0, 0, 0, 0.02);
+  }
+
+  .switch-input1:checked~.switch-handle1 {
+    left: 74px;
+    box-shadow: -1px 1px 5px rgba(0, 0, 0, 0.2);
+  }
+
+  /* Transition
+========================== */
+  .switch-label1,
+  .switch-handle1 {
+    transition: All 0.3s ease;
+    -webkit-transition: All 0.3s ease;
+    -moz-transition: All 0.3s ease;
+    -o-transition: All 0.3s ease;
+  }
+
+  section {
+    min-height: 84vh;
+    padding: 1rem;
+}
+.avatar {
+  vertical-align: middle;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+}
+button, input, optgroup, select, textarea {
+    margin: 0;
+    font-family: inherit;
+    font-size: 18px;
+    line-height: inherit;
+}
+</style>
+
+<body>
+  <header>
+    <div class="icon">
+      <a href="{% url 'projects' %}" class="header__logo">
+        <p>VerB</p>
+      </a>
+    </div>
+    <div class="user">
+      <img src="{{ profile.profile_image.url }}" alt="" />
+      <h3 class="name">{{profile.name}}</h3>
+      <p class="post">{{ profile.shop_name }}</p>
+    </div>
+    <div class="navbar">
+      <ul>
+        <li class="header__menuItem">
+          <a href="{% url 'projects' %}">Products</a>
+        </li>
+        <li class="header__menuItem">
+          <a href="{% url 'profiles' %}">Vendors</a>
+        </li>
+        {% if request.user.is_authenticated %}
+        <li class="header__menuItem">
+          <a href="{% url 'account' %}">Account</a>
+        </li>
+        <li class="header__menuItem">
+          <a href="{% url 'inbox' %}">Notification <span style="color: red"> {{unreadCount}}</span></a>
+        </li>
+        <li class="header__menuItem">
+          <span><img src="{{ request.user.profile.profile_image.url }}" alt="Avatar" class="avatar">
+         <a href="{% url 'logout' %}" class="btn btn--sub">Logout</a></span> 
+        </li>
+
+        {% else %}
+        <li class="header__menuItem">
+          <a href="{% url 'login' %}" class="btn btn--sub">Login/Sign Up</a>
+        </li>
+        {% endif %}
+      </ul>
+    </div>
+  </header>
+ <style>
+  .img-fluid {
+    max-width: 70%;
+    height: auto;
+}
+
+.home p {
+    font-size: 2rem;
+    color: #787c99;
+    padding: 1rem 0;
+}
+.jumbotron {
+    padding: 2rem 1rem;
+    margin-bottom: 2rem;
+    background-color: #0a0d284f;
+    border-radius: 0.3rem;
+}
+.education .box-container .box {
+    width: 38rem;
+    margin: 4rem 1rem;
+    padding-left: 4rem;
+    border-left: 0.2rem solid #333;
+    position: relative;
+}
+ </style>
+  <div id="menu" class="fas fa-bars"></div>
+
+  <section class="home" id="home">
+  
+    <div class="jumbotron m-3">
+      <h3 class="secondary text-light text-center font-weight-bold">my latest advertisement !!!</h3>
+   
+      <img src="{{inbox.banner_image.url}}" class="img-fluid" alt="Responsive image">
+      <p class="secondary text-light">{{inbox.body}}</p>
+      <p class="secondary text-light">{{inbox.subject}}</p>
+      <p class="secondary text-light">{{inbox.created}}</p>
+      <h1 class="display-4 text-success">HI There !</h1>
+      <hr class="my-4">
+     
+    <h1 class="secondary text-success">I'M <span>{{profile.name}}</span></h1>
+    <p class="text-light">{{ profile.bio | linebreaksbr }}</p>
+    <h3 class="title text-success">{{ vp |slice:"4" |default_if_none:"0"}}%</span> Positive UpVote ({{ vt |default_if_none:"0"}} vote{{ vt |default_if_none:"0" | pluralize:"s"}})</h3>
+    {% if request.user.is_authenticated %}
+    <form class="form" id="review-form" action="#!12">
+        <!-- Textarea -->
+        {% csrf_token %}
+        <input type="text" hidden value="{{profile.id}}">
+        {% for field in form %}
+        <div class="form__field" style="max-width: 600px;">
+            <label for="formInput#textarea"style="font-size:20px;color:#fff;">{{field.label}}</label>
+            {{field}}
+        </div>
+        {% endfor %}
+        <input class="btn btn-warning" id ="review" type="submit" value="Add Vote" />
+    </form>
+    {% endif %}
+    </div>
+ 
+    
+  </section>
+
+  <section class="about" id="about">
+    <h1 class="heading"><span>about</span> me</h1>
+    <div class="row">
+      <div class="info">
+        <h3><span>name : </span>{{profile.name}}</h3>
+        <h3><span>Shop Name: </span>{{profile.shop_name}}</h3>
+        <h3><span>pin number : </span>{{profile.pin_number}}</h3>
+        <h3><span>Location : </span>{{ profile.location }}</h3>
+        <h3><span>Address : </span>{{ profile.address| linebreaksbr }}</h3>
+        <h3><span>language Known : </span>{{ profile.language}}</h3>
+        <h3><span>opening-time : </span>{{profile.open_time}}</h3>
+        <h3><span>closing-time : : </span>{{profile.closed_time}}</h3>
+        
+       
+       
+          <h3>
+            <span>Real Opening Time Status:</span><label class="switch1">
+              <input class="switch-input1" type="checkbox" {% if profile.check %} checked {% endif %} />
+              <span class="switch-label1" data-on="Open" data-off="Close"></span>
+              <span class="switch-handle1"></span>
+            </label>
+          </h3>
+        
+      </div>
+      <div class="counter">
+        <div class="box">
+          <span>Facebook</span>
+          <h3>add facebook account link here!!!    </h3>
+          {% if profile.social_facebook %}
+          <a class="btn btn-primary" style="background-color: #3b5998;" href="{{profile.social_facebook}}" role="button"
+          ><i class="fab fa-facebook-f"></i
+        ></a>
+        {% else %}
+        <a class="btn btn-primary" style="background-color: #3b5998;" href="#!" role="button"
+        ><i class="fab fa-facebook-f"></i
+      ></a>
+        {% endif %}
+        </div>
+
+        <div class="box">
+          <span>Web-address</span>
+          <h3>add your personal website link here!!!</h3>
+         {% if profile.social_twitter %}
+          <a class="btn btn-primary"  href="{{profile.social_twitter}}" role="button"
+          ><i class="fa fa-globe" style="color:#0d94af"></i></a>
+        {% else %}
+        <a class="btn btn-primary"  href="#!" role="button"
+        ><i class="fa fa-globe" style="color:#0d94af"></i></a>
+      {% endif %}
+        </div>
+
+        <div class="box">
+          <span>Youtube</span>
+          <h3>add youtube channel link here!!!</h3>
+          {% if profile.social_youtube %}
+          <a class="btn btn-primary" style="background-color: #ed302f;" href="{{profile.social_youtube}}" role="button"
+          ><i class="fab fa-youtube"></i
+        ></a>
+        {% else %}
+        <a class="btn btn-primary" style="background-color: #ed302f;" href="#!" role="button"
+        ><i class="fab fa-youtube"></i
+      ></a>
+      {% endif %}
+        </div>
+
+        <div class="box">
+          <span>Instagram</span>
+          <h3>add intagram profile link here!!!</h3>
+          {% if profile.social_website %}
+        <a class="btn btn-primary" style="background-color: #ac2bac;" href="{{profile.social_website}}" role="button"><i class="fab fa-instagram"></i></a>
+        {% else %}
+        <a class="btn btn-primary" style="background-color: #ac2bac;" href="#!" role="button"><i class="fab fa-instagram"></i></a>
+        {% endif %}
+      </div>
+
+      </div>
+    </div>
+  </section>
+
+  <section class="education" id="education">
+    <h1 class="heading">my <span>skill</span></h1>
+    <div class="box-container">
+      {% for skill in topskills %}
+      <div class="box">
+        <i class="fas fa-graduation-cap"></i>
+        <span>{{skill.name}}</span>
+        <p class="mt-3">{{ skill.description | linebreaksbr }}</p>
+      </div>
+      {% endfor %}
+    </div>
+    <h1 class="heading">other<span>skill</span></h1>
+    <div class="skill__box">
+      {% for skill in otherskills %}
+      <h3><span> {{skill}} </span></h3>
+      {% endfor %}
+    </div>
+    <div class="note">
+    {% if profile.note %}
+ <h1 class="heading" style="margin-top:5px;">Note: <span>{{profile.note}}</span></h1>
+ {% endif %}
+</div>
+  </section>
+<style>
+    .product .popup-card .info h2 {
+    font-size: 30px;
+    line-height: 29px;
+    /* margin: 10px; */
+}
+.badge {
+    display: inline-block;
+    padding: 0.25em 0.4em;
+    font-size: 75%;
+    font-weight: 700;
+    /* line-height: 1; */
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: 0.25rem;
+}
+
+
+@media screen and (max-width: 480px) {
+  .product .popup-card .product-img img {
+    z-index: 2;
+    position: relative;
+    width: 450px;
+    /* left: -50px; */
+    height: 200px;
+}
+
+  }
+
+  .btn-search {
+	  background: #424242;
+	  border-radius: 0;
+	  color: #fff;
+	  border-width: 1px;
+	  border-style: solid;
+	  border-color: #1c1c1c;
+	}
+	.btn-search:link, .btn-search:visited {
+	  color: #fff;
+	}
+	.btn-search:active, .btn-search:hover {
+	  background: #1c1c1c;
+	  color: #fff;
+	}
+  .form-control {
+    display: block;
+    width: 40%;
+    padding: 0.375rem 0.75rem;
+    font-size: 2rem;
+    line-height: 1.5;
+    color: #495057;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+    height: 40px;
+}
+.product .popup-card .product-img img {
+    z-index: 2;
+    position: relative;
+    width: 351px;
+    left: 0px;
+    height: 300px;
+    margin-bottom: 20px;
+}
+
+
+</style>
+
+
+  <!-- ----------------------------------- -->
+  <section class="portfolio" id="portfolio">
+    <h1 class="heading">my <span>products/services</span></h1>
+    <input type="hidden" id ="pk" name="profile_id" value="{{profile.id}}">
+    <input type="text" class="form-control" id="search" placeholder="Search for...">
+    <span class="input-group-btn">
+      <button class="btn btn-search" id="search-btn" type="button"><i class="fa fa-search fa-fw"></i> Search</button>
+    </span>
+
+ <style>
+   .text-center {
+    text-align: center!important;
+    /* align-items: flex-end; */
+    position: relative;
+    justify-content: center;
+    display: flex;
+   }
+   .card {
+    width: 30rem;
+    height: 50rem;
+    display: flex;
+    flex-direction:row;
+    margin-left: 20px;
+    flex-wrap: wrap;
+}
+   
+ </style>
+ <div id="post-box" class="text-center" style="display:flex; flex-direction:row; color:blue; flex-wrap:wrap;">
+ </div>
+    <div class="container infinite-container">
+      {% for project in projects %}
+      <div class="product infinite-item">
+        <div class="product-card">
+          <h2 class="name">{{project.title | slice:"60"}}</h2>
+          <span class="price">&#8377;{{project.price}}</span>
+          <a href="#!" class="popup-btn">Quick View</a>
+          <a href="{% url 'project' project.id %}">
+            <img src="{{project.featured_image.url}}" alt="" class="product-img" /></a>
+        </div>
+        <div class="popup-view">
+          <div class="popup-card">
+            <a><i class="fas fa-times close-btn"></i></a>
+            <div class="product-img">
+
+                <img src="{{project.featured_image.url}}" alt="" />
+            </div>
+            <div class="info">
+              <h2>
+                {{project.title | slice:"60"}}
+
+                {% if project.check %}
+                <p class="text-dark">
+                  <span class="badge badge-success">Available</span>
+                </p>
+                {% else %}
+                <p class="text-dark">
+                  <span class="badge badge-pill badge-danger">Not Available</span>
+                </p>
+                {% endif %}
+                <br /><span>{{project.created}}</span>
+              </h2>
+              <p>{{project.description | slice:"100"}}</p>
+              <span class="price">&#8377; {{project.price}} </span>
+              <!-- <a href="#" class="add-cart-btn">Add to Cart
+                    </a>
+                    <a href="#" class="add-wish">Add to Wishlist</a> -->
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </section>
+
+
+
+
+  <section class="contact" id="contact">
+    <h1 class="heading"><span>contact</span> me</h1>
+    <div class="row">
+      <div class="content">
+        <h3 class="title">contact info</h3>
+        <h3 class="text-warning" id="latVal" ><span>Latitude: </span>{{profile.latitude}} </h3>
+        <h3 class="text-warning" id="lngVal"><span>Longitude: </span>{{profile.longitude}} </h3>
+
+        <div class="info">
+          <h3><i class="fas fa-envelope"></i>{{profile.email}}</h3>
+          {% if profile.select_opt == 'yes' %}
+          <h3><i class="fas fa-phone">+91 {{ profile.mobile_no }}</i></h3>
+          {% endif %}
+          <h3><i class="fas fa-map-marker-alt"></i>{{ profile.address | linebreaksbr }}</h3>
+        </div>
+      </div>
+      <!-- map -->
+      <div id="map">
+
+      </div>
+      <style>
+        #map {
+          background-color: hotpink;
+          flex-wrap: none;
+          min-height: 250px;
+          min-width: 400px;
+        }
+
+        .marker {
+          background-image: url('https://docs.mapbox.com/help/demos/custom-markers-gl-js/mapbox-icon.png');
+          background-size: cover;
+          width: 50px;
+          height: 50px;
+          border-radius: 50%;
+          cursor: pointer;
+        }
+      </style>
+      <script>
+
+
+let preLat;
+let preLng;
+const checkPreCoord = ( ) => {
+  preLat = document.getElementById('latVal').innerHTML;
+  preLng = document.getElementById('lngVal').innerHTML;
+
+  preLat = parseFloat( preLat.split('</span>')[1])
+  preLng = parseFloat( preLng.split('</span>')[1])
+
+  if(preLng === "None"){
+    preLng = null;
+  }
+  if(preLat=== "None"){
+    preLat= null;
+  }
+
+}
+
+
+checkPreCoord()
+
+        const drawMap = (latitude, longitude) => {
+          console.log({latitude, longitude});
+
+          mapboxgl.accessToken = 'pk.eyJ1Ijoia2FtbGVzaHlhZGF2IiwiYSI6ImNreTF0YjhxejBhNGcydWxqcnd1dDJ0bWoifQ.cMnlsho1mJ1A3ePsFBZ_JA';
+          const map = new mapboxgl.Map({
+            container: 'map',
+            style: 'mapbox://styles/kamleshyadav/cky96cgm82kv314s0isk8ftml',
+            center: [longitude, latitude],
+            zoom: 12
+          });
+
+
+        const el = document.createElement('div');
+        el.className = 'marker';
+
+        // make a marker for each feature and add to the map
+        new mapboxgl.Marker(el).setLngLat([longitude, latitude]).addTo(map);
+
+
+
+        }
+        const getUserLatLong = () => {
+          navigator.geolocation.getCurrentPosition((i) => {
+            const latitude = i.coords.latitude
+            const longitude  = i.coords.longitude
+            // console.log({latitude,longitude})
+
+  if(preLat && preLng){
+    drawMap(preLat, preLng)
+  }else{
+    drawMap(latitude, longitude)
+  }
+          });
+        }
+
+        getUserLatLong()
+      </script>
+    </div>
+  </section>
+  <div class="spinner-border text-info" style="width: 5rem; height: 5rem" role="status">
+    <span class="sr-only">Loading...</span>
+  </div>
+  <a href="#home" class="top">
+    <img src="images/scroll-top-img.png" alt="" />
+  </a>
+  {% if projects.has_next %}
+  <a class="infinite-more-link" href="?page={{ projects.next_page_number }}">More</a>
+  {% endif %}
+  <a href="#home" class="top">
+    <img src="images/scroll-top-img.png" alt="" />
+  </a>
+
+  <script src="{% static 'js/jquery.waypoints.min.js' %}"></script>
+  <script src="{% static 'js/infinite.min.js' %}"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script type="text/javascript" defer>
+    const showHideViewProduct = () => {
+      var popupViews = document.querySelectorAll(".popup-view");
+      var popupBtns = document.querySelectorAll(".popup-btn");
+      var closeBtns = document.querySelectorAll(".close-btn");
+
+      //javascript function
+      var popup = function (popupClick) {
+        popupViews[popupClick].classList.add("active");
+      };
+
+      popupBtns.forEach((popupBtn, i) => {
+        popupBtn.addEventListener("click", () => {
+          popup(i);
+        });
+      });
+      // javascript for close btn
+      closeBtns.forEach((closeBtn) => {
+        closeBtn.addEventListener("click", () => {
+          popupViews.forEach((popupView) => {
+            popupView.classList.remove("active");
+          });
+        });
+      });
+    };
+    showHideViewProduct();
+  </script>
+  <!-- ----------------------------------- -->
+  <script>
+    var infinite = new Waypoint.Infinite({
+      element: $(".infinite-container")[0],
+      offset: "bottom-in-view",
+      onBeforePageLoad: function () {
+        $(".spinner-border").show();
+      },
+      onAfterPageLoad: function () {
+        $(".spinner-border").hide();
+
+        showHideViewProduct();
+      },
+    });
+  </script>
+  <script>
+    $(document).ready(function () {
+      $("#menu").click(function () {
+        $(this).toggleClass("fa-times");
+        $("header").toggleClass("toggle");
+      });
+
+      $(window).on("scroll load", function () {
+        $("#menu").removeClass("fa-times");
+        $("header").removeClass("toggle");
+      });
+
+      if ($(window).scrollTop() > 0) {
+        $(".top").show();
+      } else {
+        $(".top").hide();
+      }
+      $('a[href"="#"]').on("click", function (e) {
+        e.preventDefault();
+        $("html,body").animate(
+          {
+            scrollTop: $($(this).attr("href")).offset().top,
+          },
+          500,
+          "linear"
+        );
+      });
+    });
+  </script>
+
+  <script>
+    function getCookie(name) {
+  let cookieValue = null;
+  if (document.cookie && document.cookie !== "") {
+    const cookies = document.cookie.split(";");
+    for (let i = 0; i < cookies.length; i++) {
+      const cookie = cookies[i].trim();
+      // Does this cookie string begin with the name we want?
+      if (cookie.substring(0, name.length + 1) === (name + "=")) {
+        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+        break;
+      }
+    }
+  }
+  return cookieValue;
+}
+
+$('#review').click(function(){
+
+var vote = $('#id_value').val();
+console.log(vote)
+  $.ajax({
+    url: "{% url 'review-profile' profile.id %}",
+    type: "POST",
+    dataType: "json",
+    data: {"value": vote},
+    headers: {
+      "X-Requested-With": "XMLHttpRequest",
+      "X-CSRFToken": getCookie("csrftoken"),  // don't forget to include the 'getCookie' function
+    },
+    success: (response) => {
+      console.log(data)
+    },
+    error: (error) => {
+        console.log("hi");
+      }
+    });
+  });
+ 
+const postBox = document.getElementById('post-box')
+
+$('#search-btn').click(function(){
+
+  var searchText = $('#search').val();
+  console.log(searchText)
+    $.ajax({
+      url: "{% url 'user-profile' profile.id %}",
+      type: "POST",
+      dataType: "json",
+      data: {"query": searchText},
+      headers: {
+        "X-Requested-With": "XMLHttpRequest",
+        "X-CSRFToken": getCookie("csrftoken"),  // don't forget to include the 'getCookie' function
+      },
+      success: (response) => {
+        console.log(response);
+        var data = (response["lst"]);
+        console.log(data)
+
+
+        data.forEach(el=>{
+          var url = window.location.origin + '/project/' + el.id + '/'
+
+          console.log(url)
+
+          postBox.innerHTML+=`
+             <div class="card mt-5 text-center" style="width: 30rem; height:50rem;">
+                  <img class="card-img-top" style="height:200px;" src="${el.image}" alt="Card image cap">
+                  <div class="card-body">
+                    <h3 class="card-title" style="font-size: 2.95rem;">${el.title}</h3>
+                    <p class="card-text" style="font-size: 2rem;">&#8377;${el.price}</p>
+                    <p class="card-text" style="font-size: 2rem;">${el.check=='true' ? 'Available':'Not Available'}</p>
+                    <a href="${url}" class="btn btn-primary">Details</a>
+                    <br>
+                    <p style="color:green">search for ${el.title}</p>
+                  </div>
+
+                </div>
+          `
+        })
+
+      },
+      error: (error) => {
+        console.log("hi");
+      }
+    });
+    document.getElementById('search').value = ''
+  });
+  </script>
+</body>
+{% else %}
+
+<style>
+    .page_404{ padding:40px 0; background:#fff; font-family: 'Arvo', serif;
+}
+
+.page_404  img{ width:100%;}
+
+.four_zero_four_bg{
+
+ background-image: url(https://cdn.dribbble.com/users/285475/screenshots/2083086/dribbble_1.gif);
+    height: 400px;
+    background-position: center;
+ }
+
+
+ .four_zero_four_bg h1{
+ font-size:80px;
+ }
+
+  .four_zero_four_bg h3{
+			 font-size:80px;
+			 }
+
+			 .link_404{
+	color: #fff!important;
+    padding: 10px 20px;
+    background: #39ac31;
+    margin: 20px 0;
+    display: inline-block;}
+	.contant_box_404{ margin-top:-50px;}
+</style>
+<section class="page_404">
+	<div class="container">
+		<div class="row">
+		<div class="col-sm-12 ">
+		<div class="col-sm-10 col-sm-offset-1  text-center">
+		<div class="four_zero_four_bg">
+			<h1 class="text-center ">PROFILE IS HIDDEN</h1>
+
+
+		</div>
+
+		<div class="contant_box_404">
+		<h3 class="h2">
+		Look like you're lost
+		</h3>
+
+		<p>the page you are looking for not avaible!</p>
+
+		<a href="{% url 'projects' %}" class="link_404">Go to Home</a>
+	</div>
+		</div>
+		</div>
+		</div>
+	</div>
+</section>
+{% endif %}
+</html>

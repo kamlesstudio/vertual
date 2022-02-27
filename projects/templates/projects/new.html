@@ -1,0 +1,572 @@
+<style>
+
+    @import url('https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Poppins:ital,wght@0,200;1,100;1,200&display=swap');
+    
+    *
+    {
+        margin:0;
+        padding:0;
+        box-sizing:border-box;
+        font-family:'poppins',sans-serif;
+    }
+    
+    .container {
+        position:relative;
+        width:1200px;
+        display:grid;
+        grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+        grid-gap:20px;
+        padding:20px;
+    }
+    
+    .container .card{
+        width:100%;
+        background:#fff;
+    }
+    
+    .container .card .imgBx{
+        position:relative;
+        width:100%;
+        height:310px;
+        overflow:hidden;
+    }
+    
+    .container .card .imgBx img{
+        position:absolute;
+        top:0;
+        left:0;
+        width:100%;
+        height:100%;
+        object-fit:cover;
+        transition:0.5s ease-in-out;
+        transform-origin:right;
+    }
+    
+    .container .card:hover .imgBx img{
+        transform: scale(1.5);
+    }
+    .container .card .content{
+        padding:10px;
+    }
+    
+    
+    .action {
+        position:absolute;
+        top:10px;
+        right:10px;
+    }
+    
+    
+    .action li {
+        position:relative;
+        list-style:none;
+        width:40px;
+        height:40px;
+        background:#fff;
+        display:flex;
+        justify-content:center;
+        align-items:center;
+        margin:4px;
+        cursor:pointer;
+        transition: transform 0.5s;
+        transform:translateX(60px);
+    }
+    
+    .container .card:hover .action li{
+        transform:translateX(0px);
+    }
+    
+    .action li:nth-child(2){
+        transition-delay:0.15s;
+    }
+    .action li:nth-child(3){
+        transition-delay:0.3s;
+    }
+    
+    
+    .action li span{
+        position:absolute;
+        right:50px;
+        top:50%;
+        transform:translateY(-50%) translateX(20px);
+        white-space:nowrap;
+        padding:4px 6px;
+        background:#fff;
+        color:#333;
+        font-weight:500;
+        font-size:12px;
+        border-radius:4px;
+        pointer-events:none;
+        opacity:0;
+        transition:0.5s;
+    }
+    
+    .action li:hover span{
+        opacity:1;
+        transform:translateY(-50%) translateX(0px);
+    }
+    
+    .action li:hover{
+        background:#ff2020;
+        color:#fff
+    }
+    
+    .action li span::before{
+        content:'';
+        position:absolute;
+        top:50%;
+        right:-4px;
+        width:8px;
+        height:8px;
+        background:#fff;
+        transform:translateY(-50%)rotate(45deg);
+    }
+    .container .card .content .productName h3{
+        font-size:18px;
+        font-weight:500;
+        color:#333;
+        margin:5px,0;
+        
+    }
+    .container .card .content .price_rating{
+        display:flex;
+        justify-content:space-between;
+        align-items:center;
+    }
+    
+    .container .card .content .price_rating h2{
+        font-size:20px;
+        color:#ff2020;
+        font-weight:500;
+        
+    }
+    
+    .container .card .content .price_rating .fa {
+        color:#ffd513;
+        cursor:pointer;
+    }
+    
+    
+    </style>
+
+
+
+
+<section class="projectsList col-sm">
+   
+   
+          
+              <div class="container">
+                <div class="card">
+                    <div class="imgBx">
+                      <a href="{% url 'project' project.id %}" class="project">
+                        <img   src="{{project.featured_image.url}}" alt="project thumbnail" /></a>
+                 <ul class="action">
+                 <li><i class="fa fa-heart" aria-hidden="true"></i>
+                 <span>Add to wishlist</span></li>
+                  <li><i class="fa fa-heart" aria-hidden="true"></i>
+                 <span>Add to cart</span></li>
+                <li><i class="fa fa-heart" aria-hidden="true"></i>
+                 <span>view details</span></li>
+                 </ul>
+              </div>
+              <div class="content">
+                <div class="productName">
+                  <p class="project__author  text-white"> <b> <h3>{{project.title}}</h3> </b></p>
+                  <p class="project__author  text-white"> <b> {{project.description | linebreaksbr| slice:"70"}}</b></p>
+                  <p class="tag tag--pill tag--main ml-5 float-right">price: {{project.price}} &#8377;</p>
+                  <img src="{{project.owner.profile_image.url}}" style="height:42px; width:42px;"
+                class="img-fluid border rounded-left border-lg border-0"
+                alt="portfolio">
+                </div>
+                <div class="price_rating">
+                  <h2>$14.56</h2>
+                  <div class="rating">
+                    {% for tag in project.tags.all %}
+                  <span class="tag tag--pill tag--main">
+                     <small>{{tag}}</small>
+                   </span> 
+               {% endfor %}
+                  </div>
+                  <strong class="float-right">{{ project.liked.all.count }} likes</strong>
+                  <form  method="POST" id ="likeform" action="#">
+                    {% csrf_token %}
+                    <input type="hidden" id ="pk" name="project_id" value="{{project.id}}">
+                    {% if user not in project.liked.all  %}
+                      <button class="btn btn-success" type="submit"><i onclick="myFunction(this)" class="fa fa-thumbs-up"></i>
+
+                      </button>
+                    {% else %}
+                      <button class="btn btn-danger" type="submit">Unlike</button>
+                    {% endif %}
+
+
+                    {% if project.check %}
+                    <p class="text-white">
+                     <span class="badge badge-success ">Available</span>
+                    
+                    </p>
+                    {% else %}
+                    <p class="text-white">
+                      <span class="badge badge-pill badge-danger">Not Available</span>
+                    </p>
+                    {% endif %}
+                    <p class="project--rating mb-2">
+                      <span style="font-weight: bold;">
+                        <p class="title text-white">{{project.vote_ratio}}%
+                      </span> Positive
+                      Feedback ({{project.vote_total}} vote{{project.vote_total | pluralize:"s"}})
+                    </p>
+                  </form>
+                <div>
+
+                  <a class="project__author text-dark"
+                  href=" {{ project.owner.get_absolute_url }}"> <p class="title text-white"> {{project.owner.name|capfirst}}</p></a>
+                <p><a class="project__author text-dark "
+                    href=" {{ project.owner.get_absolute_url }}">Pin Number : {{project.owner.pin_number}}</a></p>
+                <p class="project__author text-white"><span class="badge badge-info">opening-time : {{project.owner.open_time}}</span></p>
+                <p class="project__author text-white"><span class="badge badge-info">closing-time : {{project.owner.closed_time}}</span></p>
+                </div>
+             </div>
+             </div>
+            
+            
+          
+             
+                
+
+             
+         {% endfor %}
+
+
+</section>
+
+{% include 'pagination.html' with querysets=projects custom_range=custom_range %}
+</main>
+<script>
+$(document).ready(function(){
+$('#likeform').submit(function (event) {
+event.preventDefault();
+$.ajax({
+type:"POST",
+url:"{% url 'projects' %}",
+data : {
+        'project_id': $('#pk').val(),
+        'csrfmiddlewaretoken':$("input[name=csrfmiddlewaretoken]").val()
+       },
+ });
+ return false;
+ })
+});
+</script>
+
+
+
+<!DOCTYPE html>
+{% load static %}
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" integrity="sha512-5A8nwdMOWrSz20fDsjczgUidUBR8liPYU+WymTZP1lmY9G6Oc7HlZv156XqnsgNUzTyMefFTcsFH/tnJE/+xBg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Poppins:ital,wght@0,200;1,100;1,200&display=swap');
+
+*
+{
+	margin:0;
+	padding:0;
+	box-sizing:border-box;
+	font-family:'poppins',sans-serif;
+}
+
+body{
+	display:flex;
+	justify-content:center;
+	align-content:center;
+	min-height:100vh;
+	background:#dcdcdc;
+}
+.container {
+	position:relative;
+	width:1200px;
+	display:grid;
+	grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+	grid-gap:20px;
+	padding:20px;
+}
+
+.container .card{
+	width:100%;
+	background:#fff;
+}
+
+.container .card .imgBx{
+	position:relative;
+	width:100%;
+	height:310px;
+	overflow:hidden;
+}
+
+.container .card .imgBx img{
+	position:absolute;
+	top:0;
+	left:0;
+	width:100%;
+	height:100%;
+	object-fit:cover;
+	transition:0.5s ease-in-out;
+	transform-origin:right;
+}
+
+.container .card:hover .imgBx img{
+	transform: scale(1.5);
+}
+.container .card .content{
+	padding:10px;
+}
+
+
+.action {
+	position:absolute;
+	top:10px;
+	right:10px;
+}
+
+
+.action li {
+	position:relative;
+	list-style:none;
+	width:40px;
+	height:40px;
+	background:#fff;
+	display:flex;
+	justify-content:center;
+	align-items:center;
+	margin:4px;
+	cursor:pointer;
+	transition: transform 0.5s;
+	transform:translateX(60px);
+}
+
+.container .card:hover .action li{
+	transform:translateX(0px);
+}
+
+.action li:nth-child(2){
+	transition-delay:0.15s;
+}
+.action li:nth-child(3){
+	transition-delay:0.3s;
+}
+
+
+.action li span{
+	position:absolute;
+	right:50px;
+	top:50%;
+	transform:translateY(-50%) translateX(20px);
+	white-space:nowrap;
+	padding:4px 6px;
+	background:#fff;
+	color:#333;
+	font-weight:500;
+	font-size:12px;
+	border-radius:4px;
+	pointer-events:none;
+	opacity:0;
+	transition:0.5s;
+}
+
+.action li:hover span{
+	opacity:1;
+	transform:translateY(-50%) translateX(0px);
+}
+
+.action li:hover{
+	background:#ff2020;
+	color:#fff
+}
+
+.action li span::before{
+	content:'';
+	position:absolute;
+	top:50%;
+	right:-4px;
+	width:8px;
+	height:8px;
+	background:#fff;
+	transform:translateY(-50%)rotate(45deg);
+}
+.container .card .content .productName h3{
+	font-size:18px;
+	font-weight:500;
+	color:#333;
+	margin:5px,0;
+	
+}
+.container .card .content .price_rating{
+	display:flex;
+	justify-content:space-between;
+	align-items:center;
+}
+
+.container .card .content .price_rating h2{
+	font-size:20px;
+	color:#ff2020;
+	font-weight:500;
+	
+}
+
+.container .card .content .price_rating .fa {
+	color:#ffd513;
+	cursor:pointer;
+}
+
+</style>
+</head>
+<body>
+
+  
+  <div class="container">
+    <div class="card">
+        <div class="imgBx">
+           <img src="{% static '1.jpg' %} ">
+     <ul class="action">
+     <li><i class="fa fa-heart" aria-hidden="true"></i>
+     <span>Add to wishlist</span></li>
+      <li><i class="fa fa-heart" aria-hidden="true"></i>
+     <span>Add to cart</span></li>
+    <li><i class="fa fa-heart" aria-hidden="true"></i>
+     <span>view details</span></li>
+     </ul>
+        </div>
+  <div class="content">
+    <div class="productName">
+      <h3>chocobar</h3>
+    </div>
+    <div class="price_rating">
+      <h2>$14.56</h2>
+      <div class="rating">
+        <i class="fa fa-star" aria-hidden="true"></i>
+        <i class="fa fa-star" aria-hidden="true"></i>
+        <i class="fa fa-star" aria-hidden="true"></i>
+        <i class="fa fa-star" aria-hidden="true"></i>
+        <i class="fa fa-star" aria-hidden="true"></i>
+      </div>
+    </div>
+  </div>
+    </div>
+
+ <div class="card">
+        <div class="imgBx">
+           <img src="{% static '2.jpg' %}">
+        </div>
+  <div class="content">
+    <div class="productName">
+      <h3>chocobar</h3>
+    </div>
+    <div class="price_rating">
+      <h2>$14.56</h2>
+      <div class="rating">
+        <i class="fa fa-star" aria-hidden="true"></i>
+        <i class="fa fa-star" aria-hidden="true"></i>
+        <i class="fa fa-star" aria-hidden="true"></i>
+        <i class="fa fa-star" aria-hidden="true"></i>
+        <i class="fa fa-star" aria-hidden="true"></i>
+      </div>
+    </div>
+  </div>
+    </div>
+ <div class="card">
+        <div class="imgBx">
+           <img src="{% static '3.jpg' %}">
+        </div>
+  <div class="content">
+    <div class="productName">
+      <h3>chocobar</h3>
+    </div>
+    <div class="price_rating">
+      <h2>$14.56</h2>
+      <div class="rating">
+        <i class="fa fa-star" aria-hidden="true"></i>
+        <i class="fa fa-star" aria-hidden="true"></i>
+        <i class="fa fa-star" aria-hidden="true"></i>
+        <i class="fa fa-star" aria-hidden="true"></i>
+        <i class="fa fa-star" aria-hidden="true"></i>
+      </div>
+    </div>
+  </div>
+    </div>
+ <div class="card">
+        <div class="imgBx">
+           <img src="{% static '4.jpg' %}">
+        </div>
+  <div class="content">
+    <div class="productName">
+      <h3>chocobar</h3>
+    </div>
+    <div class="price_rating">
+      <h2>$14.56</h2>
+      <div class="rating">
+        <i class="fa fa-star" aria-hidden="true"></i>
+        <i class="fa fa-star" aria-hidden="true"></i>
+        <i class="fa fa-star" aria-hidden="true"></i>
+        <i class="fa fa-star" aria-hidden="true"></i>
+        <i class="fa fa-star" aria-hidden="true"></i>
+      </div>
+    </div>
+  </div>
+    </div>
+ <div class="card">
+        <div class="imgBx">
+           <img src="{% static '5.jpg' %}">
+        </div>
+  <div class="content">
+    <div class="productName">
+      <h3>chocobar</h3>
+    </div>
+    <div class="price_rating">
+      <h2>$14.56</h2>
+      <div class="rating">
+        <i class="fa fa-star" aria-hidden="true"></i>
+        <i class="fa fa-star" aria-hidden="true"></i>
+        <i class="fa fa-star" aria-hidden="true"></i>
+        <i class="fa fa-star" aria-hidden="true"></i>
+        <i class="fa fa-star" aria-hidden="true"></i>
+      </div>
+    </div>
+  </div>
+    </div>
+ <div class="card">
+        <div class="imgBx">
+           <img src="{% static '1.jpg' %}">
+        </div>
+  <div class="content">
+    <div class="productName">
+      <h3>chocobar</h3>
+    </div>
+    <div class="price_rating">
+      <h2>$14.56</h2>
+      <div class="rating">
+        <i class="fa fa-star" aria-hidden="true"></i>
+        <i class="fa fa-star" aria-hidden="true"></i>
+        <i class="fa fa-star" aria-hidden="true"></i>
+        <i class="fa fa-star" aria-hidden="true"></i>
+        <i class="fa fa-star" aria-hidden="true"></i>
+      </div>
+    </div>
+  </div>
+    </div>
+</div>
+</body>
+</html>
+
+
+<div class="col-5 mt-2">
+    {% if project.owner.profile_image %}
+  <img src="{{project.owner.profile_image.url}}" style="height:42px; width:42px;"
+    class="img-fluid border rounded-left border-lg border-0"
+    alt="portfolio">
+    {% else %}
+  <img src="#" alt="no image available" />
+  {% endif %}

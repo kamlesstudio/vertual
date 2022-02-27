@@ -1,0 +1,1008 @@
+{% extends 'main.html' %} {% block content %}
+<style>
+  body {
+    font-family: "Open sans", sans-serif;
+    font-weight: 300;
+    background-image: linear-gradient(to bottom right, #00f490, #00bbc9);
+  }
+
+  .switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+  }
+
+  .switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+
+  .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    -webkit-transition: 0.4s;
+    transition: 0.4s;
+  }
+
+  .slider:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    -webkit-transition: 0.4s;
+    transition: 0.4s;
+  }
+
+  input:checked + .slider {
+    background-color: #2196f3;
+  }
+
+  input:focus + .slider {
+    box-shadow: 0 0 1px #2196f3;
+  }
+
+  input:checked + .slider:before {
+    -webkit-transform: translateX(26px);
+    -ms-transform: translateX(26px);
+    transform: translateX(26px);
+  }
+
+  /* Rounded sliders */
+  .slider.round {
+    border-radius: 34px;
+  }
+
+  .slider.round:before {
+    border-radius: 50%;
+  }
+
+  .switch1 {
+    position: relative;
+    display: block;
+    vertical-align: top;
+    width: 100px;
+    height: 30px;
+    padding: 3px;
+    margin: 0 10px 10px 0;
+    background: linear-gradient(to bottom, #eeeeee, #ffffff 25px);
+    background-image: -webkit-linear-gradient(top, #eeeeee, #ffffff 25px);
+    border-radius: 18px;
+    box-shadow: inset 0 -1px white, inset 0 1px 1px rgba(0, 0, 0, 0.05);
+    cursor: pointer;
+    box-sizing: content-box;
+  }
+  .switch-input1 {
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    box-sizing: content-box;
+  }
+  .switch-label1 {
+    position: relative;
+    display: block;
+    height: inherit;
+    font-size: 10px;
+    text-transform: uppercase;
+    background: #eceeef;
+    border-radius: inherit;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.12),
+      inset 0 0 2px rgba(0, 0, 0, 0.15);
+    box-sizing: content-box;
+  }
+  .switch-label:before,
+  .switch-label1:after {
+    position: absolute;
+    top: 50%;
+    margin-top: -0.5em;
+    line-height: 1;
+    -webkit-transition: inherit;
+    -moz-transition: inherit;
+    -o-transition: inherit;
+    transition: inherit;
+    box-sizing: content-box;
+  }
+  .switch-label1:before {
+    content: attr(data-off);
+    right: 11px;
+    color: #aaaaaa;
+    text-shadow: 0 1px rgba(255, 255, 255, 0.5);
+  }
+  .switch-label1:after {
+    content: attr(data-on);
+    left: 11px;
+    color: #ffffff;
+    text-shadow: 0 1px rgba(0, 0, 0, 0.2);
+    opacity: 0;
+  }
+  .switch-input1:checked ~ .switch-label1 {
+    background: greenyellow;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.15),
+      inset 0 0 3px rgba(0, 0, 0, 0.2);
+  }
+  .switch-input1:checked ~ .switch-label1:before {
+    opacity: 0;
+  }
+  .switch-input1:checked ~ .switch-label1:after {
+    opacity: 1;
+  }
+  .switch-handle1 {
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    width: 28px;
+    height: 28px;
+    background: linear-gradient(to bottom, #ffffff 40%, #f0f0f0);
+    background-image: -webkit-linear-gradient(top, #ffffff 40%, #f0f0f0);
+    border-radius: 100%;
+    box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
+  }
+  .switch-handle1:before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin: -6px 0 0 -6px;
+    width: 12px;
+    height: 12px;
+    background: linear-gradient(to bottom, #eeeeee, #ffffff);
+    background-image: -webkit-linear-gradient(top, #eeeeee, #ffffff);
+    border-radius: 6px;
+    box-shadow: inset 0 1px rgba(0, 0, 0, 0.02);
+  }
+  .switch-input1:checked ~ .switch-handle1 {
+    left: 74px;
+    box-shadow: -1px 1px 5px rgba(0, 0, 0, 0.2);
+  }
+
+  /* Transition
+========================== */
+  .switch-label1,
+  .switch-handle1 {
+    transition: All 0.3s ease;
+    -webkit-transition: All 0.3s ease;
+    -moz-transition: All 0.3s ease;
+    -o-transition: All 0.3s ease;
+  }
+</style>
+<!-- Main Section -->
+<main class="settingsPage profile my-md">
+  <div class="container">
+    <div class="layout">
+      <div class="column column--1of3">
+        <div class="card text-center bg-light">
+          <div class="card__body dev">
+            <a
+              class="tag tag--pill tag--main settings__btn"
+              href="{% url 'edit-account' %}"
+              ><i class="im im-edit"></i> Edit</a
+            >
+            <img
+              class="avatar avatar--xl dev__avatar"
+              src="{{profile.profile_image.url }}"
+            />
+            <h2 class="dev__name">{{profile.name| capfirst}}</h2>
+            <p class="dev__title">{{profile.short_intro}}</p>
+            <p class="dev__location">Based in {{profile.location}}</p>
+            <p class="dev__location">{{profile.pin_number}}</p>
+            <ul class="dev__social">
+              {% if profile.social_github %}
+              <li>
+                <a
+                  title="Github"
+                  href="{{profile.social_github}}"
+                  target="_blank"
+                  ><i class="im im-github"></i
+                ></a>
+              </li>
+              {% endif %} {% if profile.social_twitter %}
+              <li>
+                <a title="Stackoverflow" href="#" target="_blank"
+                  ><i class="im im-stackoverflow"></i
+                ></a>
+              </li>
+              {% endif %} {% if profile.social_twitter %}
+              <li>
+                <a
+                  title="Twitter"
+                  href="{{profile.social_twitter}}"
+                  target="_blank"
+                  ><i class="im im-twitter"></i
+                ></a>
+              </li>
+              {% endif %} {% if profile.social_linkedin %}
+              <li>
+                <a
+                  title="LinkedIn"
+                  href="{{profile.social_linkedin}}"
+                  target="_blank"
+                  ><i class="im im-linkedin"></i
+                ></a>
+              </li>
+              {% endif %} {% if profile.social_website %}
+              <li>
+                <a
+                  title="Personal Website"
+                  href="{{profile.social_website}}"
+                  target="_blank"
+                  ><i class="im im-globe"></i
+                ></a>
+              </li>
+              {% endif %}
+            </ul>
+            <div class="row" style="margin-left: 40px">
+              <p>Real Time Status:</p>
+
+              <label class="switch1">
+                <input
+                  class="switch-input1"
+                  onclick="sit(event)"
+                  data-id="{{profile.id}}"
+                  {%
+                  if
+                  profile.check
+                  %}
+                  checked
+                  {%
+                  endif
+                  %}type="checkbox"
+                />
+                <span
+                  class="switch-label1"
+                  data-on="Open"
+                  data-off="Close"
+                ></span>
+                <span class="switch-handle1"></span>
+              </label>
+            </div>
+            <p><center>For Promotion</center></p>
+            <a
+              href="{% url 'create-message' profile.id %}"
+              class="btn btn--sub btn--lg"
+              >Send Message
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="column column--2of3">
+        <div class="devInfo">
+          <h3 class="devInfo__title">About Me</h3>
+          <p class="devInfo__about text-white">{{profile.bio}}</p>
+        </div>
+        <div class="settings mb-5">
+          <h3 class="settings__title">Skills</h3>
+          <a
+            class="tag tag--pill tag--sub settings__btn tag--lg"
+            href="{% url 'create-skill' %}"
+            ><i class="im im-plus"></i> Add Skill</a
+          >
+        </div>
+
+        {% for skill in skills %}
+        <div class="card w-100 mb-5">
+          <div class="card-body bg-light">
+            <h5 class="card-title">{{skill}}</h5>
+            <p class="card-text">{{skill.description}}</p>
+            <a
+              class="tag tag--pill tag--main settings__btn"
+              href="{% url 'update-skill' skill.id %}"
+              ><i class="im im-edit"></i> Edit</a
+            >
+            <a
+              class="tag tag--pill tag--main settings__btn"
+              href="{% url 'delete-skill' skill.id %}?next=/account"
+              ><i class="im im-x-mark-circle-o"></i> Delete</a
+            >
+          </div>
+        </div>
+
+        {% endfor %}
+
+        <div class="settings mb-5">
+          <h3 class="settings__title">Products</h3>
+          <a
+            class="tag tag--pill tag--sub settings__btn tag--lg"
+            href="{% url 'create-project' %}"
+            ><i class="im im-plus"></i> Add Project</a
+          >
+        </div>
+
+        {% for project in projects %}
+
+        <div class="product infinite-container">
+          <div class="row infinite-item">
+            <div class="col-4">
+              <a href="{% url 'project' project.id %}"
+                ><img
+                  src="{{project.featured_image.url}}"
+                  class="img mb-3 mt-5"
+                  alt="Project Thumbnail"
+              /></a>
+              <p class="tag tag--pill tag--main ml-5">
+                price: {{project.price}}
+              </p>
+            </div>
+            <div class="col-8">
+              <div class="card-deck">
+                <div class="card" style="width: 600px">
+                  <div class="card-body bg-light">
+                    <h5 class="card-title">
+                      <a href="{% url 'project' project.id %}">
+                        <h3 class="project__title">{{project.title}}</h3>
+                      </a>
+                    </h5>
+                    <p class="card-text float-right">
+                      {{project.description | slice:"100"}}
+                    </p>
+
+                    <p class="project--rating">
+                      <span style="font-weight: bold"
+                        >{{project.vote_ratio}}%</span
+                      >
+                      Postitive Feedback
+                      ({{project.vote_total}}Vote{{project.vote_total |
+                      pluralize:"s"}})
+                    </p>
+                    <form action="#">
+                      {% csrf_token %} {% if project.check %}
+                      <p style="font-weight: bold">
+                        <label class="switch">
+                          <input
+                            onclick="hit(event)"
+                            type="checkbox"
+                            class="myCheck"
+                            data-id="{{project.id}}"
+                            {%
+                            if
+                            project.check
+                            %}
+                            checked
+                            {%
+                            endif
+                            %}
+                            name="check"
+                          />
+                          <span class="slider round"></span>
+                        </label>
+                        Available
+                      </p>
+                      {% else %}
+                      <p style="font-weight: bold">
+                        <label class="switch">
+                          <input
+                            onclick="hit(event)"
+                            type="checkbox"
+                            class="myCheck"
+                            data-id="{{project.id}}"
+                            {%
+                            if
+                            project.check
+                            %}
+                            checked
+                            {%
+                            endif
+                            %}
+                            name="check"
+                          />
+                          <span class="slider round"></span>
+                        </label>
+                        Not Available
+                      </p>
+                      {% endif %}
+                    </form>
+
+                    <a
+                      class="tag tag--pill tag--main settings__btn"
+                      href="{% url 'update-project' project.id %}"
+                      ><i class="im im-edit"></i> Edit</a
+                    >
+                    <a
+                      class="tag tag--pill tag--main settings__btn float-right"
+                      href="{% url 'delete-project' project.id %}?next=/account"
+                      ><i class="im im-x-mark-circle-o"></i> Delete</a
+                    >
+                  </div>
+                  <div class="card-footer">
+                    <small class="text-muted">
+                      <p style="font-weight: bold">{{project.created}}</p>
+                    </small>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {% endfor %}
+
+        <div
+          class="spinner-border text-info"
+          style="width: 5rem; height: 5rem"
+          role="status"
+        >
+          <span class="sr-only">Loading...</span>
+        </div>
+      </div>
+      {% if projects.has_next %}
+      <a
+        class="infinite-more-link"
+        href="?page={{ projects.next_page_number }}"
+      ></a>
+      {% endif %}
+    </div>
+
+    <!-- -------------------------------------------------- -->
+    
+    <style>
+@import url('https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Nunito:ital,wght@0,200;0,300;1,200;1,300;1,400;1,500;1,600;1,700&family=Poppins:ital,wght@0,100;0,200;0,300;1,100;1,200;1,300;1,400&display=swap');
+
+
+:root{
+    --yellow:#f9ca24;
+}
+*
+{
+    font-family: "Nunito",sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    text-decoration: none;
+    outline: none;
+    border: none;
+    text-transform: capitalize;
+    transition: all .2s linear;
+}
+*::selection
+{
+    background: var(--yellow);
+    color:#333;
+}
+section
+{
+    min-height: 100vh;
+    padding: 1rem;
+}
+
+.btn
+{
+    padding: .7rem 3rem;
+    background: #333;
+    color: #fff;
+    cursor: pointer;
+    margin-top: 1rem;
+    font-size: 2rem;
+    border-radius: 5rem;
+}
+.btn i{
+    padding: 0 .5rem;
+    font-size: 1.8rem;
+}
+.btn:hover{
+    background: var(--yellow) ;
+}
+.heading
+{
+    text-align: center;
+    margin: 0 6rem;
+    font-size: 4rem;
+    padding: 1rem;
+    border-bottom: .1rem solid #fff4;
+    color: #fff;
+}
+
+.heading span
+{
+    color: var(--yellow);
+}
+header
+{
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    height: 100%;
+    width: 35rem;
+    background: #1a1a1a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-flow: column;
+    text-align: center;
+}
+
+header .user img
+{
+    height: 17rem;
+    width: 17rem;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 1rem;
+    border:.7rem solid var(--yellow)
+}
+
+header .user .name
+{
+    font-size:3.5rem;
+    color: #fff;
+}
+header .user .post
+{
+    font-size:2rem;
+    color: #eee;
+}
+
+header .navbar ul
+{
+    list-style:none;
+    padding:1rem 3rem;
+}
+
+header .navbar ul li a
+{
+    display: block;
+    padding: 1rem;
+    margin: 1.5rem 0;
+    background: #333;
+    color: #fff;
+    font-size: 2rem;
+    border-radius: 5rem;
+}
+
+header .navbar ul li a:hover
+{
+    background: var(--yellow);
+}
+
+#menu
+{
+    position: fixed;
+    top: 2rem;
+    right: 2rem;
+    background: #333;
+    color: #fff;
+    cursor: pointer;
+    font-size: 2.5rem;
+    padding: 1rem 1.5rem;
+    z-index: 1000;
+    display: none;
+}
+.home
+{
+    display: flex;
+    justify-content: center;
+    flex-flow: column;
+    padding: 0.15rem;
+}
+.home h3
+{
+    font-size:2.5rem;
+    color: #fff;
+}
+.home h1
+{
+    font-size: 5rem;
+    color: #fff;
+}
+
+.home h1 span
+{
+    color: var(--yellow);
+}
+.home p
+{
+    font-size: 2rem;
+    color: #eee;
+    padding: 1rem 0;
+}
+
+.about .row
+{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    padding: 1rem 0;
+}
+.about .row .info
+{
+    flex: 1 1 48rem;
+    padding: 2rem 1rem;
+    padding-left: 6rem;
+}
+.about .row .info h3
+{
+    font-size: 2rem;
+    color: var(--yellow);
+    padding: 1rem 0;
+    font-weight: normal;
+}
+
+.about .row .info h3 span{
+    color:#eee;
+    padding:0 .5rem;
+}
+.about .row .counter
+{
+    flex: 1 1 48rem;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+.about .row .counter .box
+{
+    width: 20rem;
+    background: #222;
+    text-align: center;
+    padding: 2rem;
+    margin: 2rem;
+}
+
+.about .row .counter .box span
+{
+    font-size: 4rem;
+    color: var(--yellow);
+}
+
+.about .row .counter .box h3{
+    font-size: 2rem;
+    color:#fff ;
+}
+.education .box-container
+{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    padding: 1rem 0;
+    padding-left: 3rem;
+}
+.education .box-container .box{
+    width: 27rem;
+    margin: 4rem 1rem;
+    padding-left: 4rem;
+    border-left: .2rem solid #fff;
+    position: relative;
+}
+.education .box-container .box span{
+    font-size: 1.3rem;
+    background: #222;
+    color: #fff;
+    border-radius: 5rem;
+    padding: .5rem 2.5rem;
+}
+.education .box-container .box h3
+{
+    font-size: 2rem;
+    color: #fff;
+    padding-top: 1.5rem;
+}
+.education .box-container .box p{
+    font-size: 1.4rem;
+    color: #eee;
+    padding-top: 1rem 0;
+}
+
+.education .box-container .box i
+{
+    position: absolute;
+    top: -1.5rem;
+    left: -2.5rem;
+    height: 5rem;
+    width: 5rem;
+    border-radius: 50%;
+    line-height: 5rem;
+    text-align: center;
+    font-size: 2rem;
+    color: #fff;
+    background: var(--yellow);
+}
+.portfolio .box-container
+{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    padding: 2rem 0;
+}
+.portfolio .box-container .box
+{
+    height: 20rem;
+    width: 26rem;
+    border-radius: 1rem;
+    margin: 2rem;
+    overflow:hidden;
+    cursor: pointer;
+}
+.portfolio .box-container .box img
+{
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+}
+
+.portfolio .box-container .box:hover img
+{
+    transform: scale(1.2);
+}
+
+.contact .row
+{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+.contact .row .content
+{
+    flex: 1 1 30rem;
+    padding: 4rem;
+    padding-bottom: 0;
+}
+
+.contact .row form
+{
+    flex: 1 1 45rem;
+    padding: 2rem;
+    margin: 2rem;
+    margin-bottom: 4rem;
+}
+
+.contact .row form .box
+{
+    padding: 1.5rem;
+    margin: 1rem 0;
+    background: #3333;
+    color: #fff;
+    text-transform: none;
+    font-size: 1.7rem;
+    width: 100%;
+}
+
+.contact .row form .box::placeholder
+{
+    text-transform: capitalize;
+}
+.contact .row form .message
+{
+    height: 15rem;
+    resize: none;
+
+}
+
+.contact .row .content .title
+{
+    text-transform: uppercase;
+    color: #fff;
+    font-size: 3rem;
+    padding-bottom: 2rem;
+}
+.contact .row .content .info h3
+{
+    display: flex;
+    align-items: center;
+    font-size: 2rem;
+    color: #eee;
+    padding: 1rem 0;
+    font-weight: normal;
+
+}
+.contact .row .content .info h3 i
+{
+    padding-right: 1rem;
+    color:var(--yellow) ;
+}
+
+.top
+{
+    position:fixed;
+    bottom: 7.5rem;
+    right: 2rem;
+    z-index: 100;
+    display: none;
+}
+
+
+
+
+
+
+
+
+@media(max-width:1200px)
+{
+    html{
+        font-size: 55%;
+    }
+    .home{
+        padding: 1rem 4rem;
+    }
+}
+
+
+@media(max-width:991px)
+{
+    header{
+        left: 120%;
+    }
+    #menu
+    {
+        display: block;
+    }
+    header.toggle{
+        left:0%;
+    }
+    body{
+        padding: 0;
+    }
+}
+
+@media(max-width:768px)
+{
+    html{
+        font-size: 50%;
+    }
+}
+
+
+
+@media(max-width:400px)
+{
+    header{
+        width: 100vw;
+    }
+    .heading{
+        margin: 0 3rem;
+    }
+    .about .row .counter .box{
+        width: 100%;
+    }
+    .education .box-container .box{
+        width: 100%;
+    }
+    .portfolio .box-container .box{
+        width: 100%;
+    }
+    .contact .row form{
+        margin: 3rem 0;
+    }
+}
+
+
+
+
+    </style>
+
+    <div style="border: 2px solid red">
+
+      
+  
+<section class="portfolio" id="portfolio">
+    <h1 class="heading"> my <span>portfolio</span></h1>
+    <div class="box-container">
+        <div class="box">
+            <img src="k.jpg" alt="">
+        </div>
+        <div class="box">
+            <img src="kk.jpg" alt="">
+        </div>
+        <div class="box">
+            <img src="ko.jpg" alt="">
+        </div>
+        <div class="box">
+            <img src="kp.jpeg" alt="">
+        </div>
+        <div class="box">
+            <img src="k.jpg" alt="">
+        </div>
+        <div class="box">
+            <img src="j.jpg" alt="">
+        </div>
+    </div>
+   
+</section>
+
+    </div>
+    <!-- -------------------------------------------------- -->
+  </div>
+</main>
+
+<script>
+  const hit = (e) => {
+    console.log("hit");
+    const elm = e.target;
+    const state = elm.checked;
+    const id = elm.dataset.id;
+    console.log({ id, state });
+    $.ajax({
+      type: "POST",
+      url: "{% url 'update-status' %}",
+      data: {
+        project_id: id,
+        state: state,
+        csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val(),
+      },
+    });
+    return false;
+  };
+</script>
+<script>
+  const sit = (e) => {
+    console.log("sit");
+    const elm = e.target;
+    const state = elm.checked;
+    const id = elm.dataset.id;
+    console.log({ id, state });
+    $.ajax({
+      type: "POST",
+      url: "{% url 'profile-status' %}",
+      data: {
+        profile_id: id,
+        state: state,
+        csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val(),
+      },
+    });
+    return false;
+  };
+</script>
+<!-- <div  id="email_div" style="display: block;" >
+
+          <label for="email">Email</label>
+          <input class="input" type="text" name="email" id="email">
+          <button  onclick="ajax_send_otp()">Send OTP</button>
+      </div>
+      <div id="verify_text_div"></div>
+      <div id="otp_div" style="display: none;" >
+      
+          <label for="email">OTP</label>
+          <input type="text" name="otp" id="otp">
+          <button  onclick="verify_otp()">Verify</button>
+      </div> -->
+      <!-- <script>
+
+     var otp_from_back="";
+     function ajax_send_otp(){
+        document.getElementById("email_div").style.display='none';
+        email = document.getElementById("email");
+      $.post("{% url 'send-otp' %}",
+          {
+              "email":email.value,
+              "csrfmiddlewaretoken":"{{csrf_token}}"
+          },
+          function(data, status){
+              if(status=="success"){
+                  otp_from_back = data;
+                  document.getElementById("otp_div").style.display='block';
+                  }
+     }
+    
+     );
+     }
+    function verify_otp(){
+        var user_otp=document.getElementById("otp").value;
+        if (user_otp==otp_from_back){
+            document.getElementById("verify_text_div").style.color="green";            
+            document.getElementById("verify_text_div").innerHTML="OTP Verified";
+            document.getElementById("otp_div").style.display="none";
+            document.getElementById("form_div").style.display="block";
+        }
+        else{
+            document.getElementById("verify_text_div").style.color="red";
+            document.getElementById("verify_text_div").innerHTML="Try Again!!";
+           
+        }
+    } 
+
+     # path("send_otp",views.send_otp,name="send-otp"),
+ </script> -->
+{% endblock %}

@@ -1,0 +1,66 @@
+{% extends 'main.html' %}
+{% block content %}
+
+<style>
+    .alert.alert--success, .alert.alert--success > .alert__message {
+   background-color: var(--color-success-bg);
+   color: var(--color-success);
+   z-index: 9;
+}
+.alert {
+   position: fixed;
+   padding: 0.75rem 1.25rem;
+   margin-bottom: 1rem;
+   border: 1px solid transparent;
+   border-radius: 0.25rem;
+   left: 50%;
+   transform: translateX(-50%);
+}
+</style>
+<!-- Main Section -->
+<main class="formPage my-xl">
+   <div class="content-box">
+       <div class="formWrapper">
+           <a class="backButton" href="{% url 'account' %}"><i class="im im-angle-left"></i></a>
+           <br>
+
+           <form class="form" id="FormId" method="POST" action="" name="form1"  enctype="multipart/form-data">
+               <!-- Input:Text -->
+               {% csrf_token %}
+
+               <div class="form__field">
+                   <label for="formInput#text">{{form.name.label}} </label>
+                   {{form.name}}
+               </div>
+               <div class="form__field">
+                   <label for="formInput#text">{{form.email.label}} </label>
+                   {{form.email}}
+               </div>
+               <div class="form__field">
+                   <label for="formInput#text">{{form.pin_number.label}} </label>
+                   {{form.pin_number}}
+               </div>
+
+               <div class="form__field">
+                   <label for="formInput#text">{{form.banner_image.label}} </label>
+                   {{form.banner_image}}
+               </div>
+               <div class="form__field">
+                   <label for="formInput#text">{{form.subject.label}}</label>
+                   {{form.subject}}
+               </div>
+               <div class="form__field">
+                   <label for="formInput#text">{{form.body.label}}</label>
+                   {{form.body}}
+               </div>
+
+               <input class="btn btn--sub btn--lg  my-md" type="submit" value="Submit" />
+            </form>
+            <button class="btn btn--sub btn--lg disabled my-md" type="submit" value="Submit" /><a href="{% url 'pay' %}"></a>proceed to pay</button>
+       </div>
+   </div>
+</main>
+
+
+
+{% endblock %}

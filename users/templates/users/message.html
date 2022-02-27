@@ -1,0 +1,38 @@
+{% extends 'main.html'%}
+
+{% block content %}
+<style>
+  body {
+    font-family: 'Open sans', sans-serif;
+    font-weight: 300;
+   
+}
+</style>
+  <!-- Main Section -->
+ 
+  <main class="messagePage my-xl">
+    <div class="content-box">
+      <div class="message">
+        <a class="backButton" href="{% url 'inbox' %}"><i class="im im-angle-left"></i></a>
+        <h2 class="message__subject">{{message.subject}}</h2>
+          <a href="" class="message__author">{{message.name}}</a>
+          <p class="message__date">{{message.created}}</p>
+          <div class="message__body">
+           
+           <div class="card mb-3">
+            <img  src="{{message.banner_image.url}}" alt="project thumbnail" />
+            <div class="card-body">
+            
+              <p class="card-text">{{message.body | linebreaksbr}}</p>
+              <a class="tag tag--pill tag--main settings__btn float-right"
+              href="{% url 'delete-message' message.id %}"><i class="im im-x-mark-circle-o"></i>
+              Delete</a>
+          
+            </div>
+          </div>
+           
+          </div>
+      </div>
+    </div>
+  </main>
+{% endblock %}

@@ -1,0 +1,524 @@
+{% extends 'main.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Poppins:ital,wght@0,200;1,100;1,200&display=swap');
+/*
+*
+{
+	margin:0;
+	padding:0;
+	box-sizing:border-box;
+	font-family:'poppins',sans-serif;
+}
+
+body{
+	display:flex;
+	justify-content:center;
+	align-content:center;
+	min-height:100vh;
+	background:#dcdcdc;
+} */
+.container1 {
+
+	position:relative;
+	width:97%;
+	display:grid;
+	grid-template-columns:repeat(auto-fit,minmax(258px,1fr));
+	grid-gap:20px;
+	padding:20px;
+}
+
+.container1 .card{
+	width:100%;
+	background:#fff;
+}
+
+.container1 .card .imgBx{
+	position:relative;
+	width:100%;
+	height:310px;
+	overflow:hidden;
+}
+
+.container1 .card .imgBx img{
+	position:absolute;
+	top:0;
+	left:0;
+	width:100%;
+	height:100%;
+	object-fit:cover;
+	transition:0.5s ease-in-out;
+	transform-origin:right;
+}
+
+.container1 .card:hover .imgBx img{
+	transform: scale(1.5);
+}
+.container1 .card .content{
+	padding:10px;
+}
+
+
+.action {
+	position:absolute;
+	top:10px;
+	right:10px;
+}
+
+
+.action li {
+	position:relative;
+	list-style:none;
+	width:40px;
+	height:40px;
+	background:#fff;
+	display:flex;
+	justify-content:center;
+	align-items:center;
+	margin:4px;
+	cursor:pointer;
+	transition: transform 0.5s;
+	transform:translateX(60px);
+}
+
+.container1 .card:hover .action li{
+	transform:translateX(0px);
+}
+
+.action li:nth-child(2){
+	transition-delay:0.15s;
+}
+.action li:nth-child(3){
+	transition-delay:0.3s;
+}
+
+
+.action li span{
+	position:absolute;
+	right:50px;
+	top:50%;
+	transform:translateY(-50%) translateX(20px);
+	white-space:nowrap;
+	padding:4px 6px;
+	background:#fff;
+	color:#333;
+	font-weight:500;
+	font-size:12px;
+	border-radius:4px;
+	pointer-events:none;
+	opacity:0;
+	transition:0.5s;
+}
+
+.action li:hover span{
+	opacity:1;
+	transform:translateY(-50%) translateX(0px);
+}
+
+.action li:hover{
+	background:#ff2020;
+	color:#fff
+}
+
+.action li span::before{
+	content:'';
+	position:absolute;
+	top:50%;
+	right:-4px;
+	width:8px;
+	height:8px;
+	background:#fff;
+	transform:translateY(-50%)rotate(45deg);
+}
+.container1 .card .content .productName h3{
+	font-size:18px;
+	font-weight:500;
+	color:#333;
+	margin:5px,0;
+
+}
+.container1 .card .content .price_rating{
+	display:flex;
+	justify-content:space-between;
+	align-items:center;
+}
+
+.container1 .card .content .productName h2{
+	font-size:20px;
+	color:#ff2020;
+	font-weight:500;
+
+}
+
+.container1 .card .content .price_rating .fa {
+	color:#ffd513;
+	cursor:pointer;
+}
+#myBtn {
+  display: none;
+  position: fixed;
+  bottom: 20px;
+  right: 30px;
+  z-index: 99;
+  font-size: 18px;
+  border: none;
+  outline: none;
+  background-color: red;
+  color: white;
+  cursor: pointer;
+  padding: 15px;
+  border-radius: 4px;
+}
+
+#myBtn:hover {
+  background-color: #555;
+}
+.alert.alert--info {
+    position: fixed;
+    z-index: 9;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.alert {
+    position: fixed;
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 1rem;
+    border: 1px solid transparent;
+    left: 50%;
+    transform: translateX(-50%);
+}
+.alert.alert--error, .alert.alert--error > .alert__message {
+    background-color: var(--color-error-bg);
+    color: var(--color-error);
+    z-index: 9;
+}
+</style>
+  <!-- Main Section -->
+<button onclick="topFunction()" id="myBtn" title="Go to top">Top</button>
+<main class="projects col-sm">
+  <section class="hero-section text-center">
+    <div class="container container--narrow">
+      <div class="hero-section__box">
+        <h2>Search for <span>Products</span></h2>
+      </div>
+
+      <div class="hero-section__search">
+        <form id="searchForm" class="form" action="{% url 'projects' %}" method="get">
+          <div class="form__field">
+            <label for="formInput#search">Search By Products </label>
+            <input class="input input--text"  id="formInput#search" type="text" name="search_query"
+              value="{{search_query}}" placeholder="Enter Product Title" />
+              <input class="input input--text" style="width:150px" id="formInput#search1" type="text" name="search_query1"
+              value="{{search_query1}}" placeholder="Enter Pin number " />
+
+          </div>
+
+          <input class="btn btn--sub btn--lg  search_pop"  type="submit" value="Search" />
+        </form>
+      </div>
+    </div>
+  </section>
+  <style>
+
+    .popcard {
+        border: none;
+        height: 430px;
+        width: 320px;
+    }
+
+    .forms-inputs {
+        position: relative
+    }
+
+    .forms-inputs span {
+        position: absolute;
+        top: -18px;
+        left: 10px;
+        background-color: #fff;
+        padding: 5px 10px;
+        font-size: 15px
+    }
+    .forms-inputs input {
+        height: 45px;
+        border: 2px solid #781c1c;
+        width: 260px;
+    }
+
+    .forms-inputs input:focus {
+        box-shadow: none;
+        outline: none;
+        border: 2px solid #000
+    }
+
+    .btn {
+        height: 50px
+    }
+
+    .success-data {
+        display: flex;
+        flex-direction: column
+    }
+
+    .bxs-badge-check {
+        font-size: 90px
+    }
+        .popup {
+          position: fixed;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%,-50%);
+          width: 40px;
+          height: 400px;
+          z-index: 1000;
+          /* display: grid; */
+          display: none;
+          background: transparent;
+          place-content: center;
+        }
+        .popup h3 {
+          color: #fff;
+        }
+        #close__search_pop{
+          position: absolute;
+    right: 20px;
+    z-index: 100;
+    height: 25px;
+    width: 25px;
+    font-size: 2.5rem;
+    font-weight: 900;
+    border-radius: 50%;
+    color: #fff;
+    outline: none;
+    background: #dc6a6a;
+    border: none;
+    line-height: 1;
+}
+      </style>
+  <!-- Search Result: DevList -->
+  <div class="popup">
+    <div class="col-md-6"  >
+        <div class="card popcard px-5 py-5" id="form1" style="background-color: rgb(139 139 139 / 80%);">
+          <button id="close__search_pop" style="    position: absolute;
+            right: 20px;
+            z-index: 100;" >&times</button>
+          <form name="myform" action="{% url 'popupregistration' %}" method = "POST" id="popform" onsubmit="return validateForm()" required>
+            {% csrf_token %}
+
+
+            <div class="form-data" v-if="!submitted">
+              <div class="forms-inputs mb-4">
+                  <h3 style="color: #8f0808;">quick signup</h3>
+                <!-- <span>Username</span>  -->
+
+            </div>
+              <div class="forms-inputs mb-4"><input autocomplete="off" type="text" name="email" v-model="email" v-bind:class="{'form-control':true, 'is-invalid' : !validEmail(email) && emailBlured}" v-on:blur="emailBlured = true" placeholder=" Enter email">
+                  <div class="invalid-feedback">A valid email is required!</div>
+              </div>
+              <div class="forms-inputs mb-4"><input autocomplete="off" type="password" id="password" onkeyup="check()"  name="password1" v-model="password" v-bind:class="{'form-control':true, 'is-invalid' : !validPassword(password) && passwordBlured}" v-on:blur="passwordBlured = true" placeholder=" Password">
+                  <div class="invalid-feedback">Password must be 8 character!</div>
+              </div>
+              <div class="forms-inputs mb-4"> <input autocomplete="off" type="password"  name="password2" id="confirm_password" onkeyup="check()" v-model="password" v-bind:class="{'form-control':true, 'is-invalid' : !validPassword(password) && passwordBlured}" v-on:blur="passwordBlured = true" placeholder=" Confirm password">
+                <div class="invalid-feedback">Password must be 8 character!</div><p id="message"></p>
+            </div>
+            <div class="forms-inputs mb-4"><input autocomplete="off" type="text"  name="pin_number" v-model="pin" v-bind:class="{'form-control':true, 'is-invalid' : !validPassword(password) && passwordBlured}" v-on:blur="passwordBlured = true" placeholder=" Your area pin number">
+              <div class="invalid-feedback">Pin number must be 6 character!</div>
+          </div>
+              <div class="mb-3"> <button v-on:click.stop.prevent="submit" class="btn btn-dark w-100">Login</button> </div>
+          </div>
+        </form>
+        </div>
+    </div>
+  </div>
+
+<style>
+    .tag--sub, .tag--sub > small {
+    background: #7ed321;
+    color: var(--color-sub-light);
+    font-weight: 500;
+}
+p, span, strong {
+    font-size: 1.6rem;
+    color: #8cd000;
+    font-weight: var(--font-regular);
+    font-weight: 600;
+}
+</style>
+
+  <section class="projectsList">
+
+    <div class="container infinite-container">
+      <div class="grid grid--three">
+        <div class="container1 infinite-item">
+          {% for project in projects %}
+          <div class="card">
+              <div class="imgBx">
+                  <img   src="{{project.featured_image.url}}" alt="project thumbnail" />
+                  <ul class="action">
+                    <li><i class="fa fa-power-off" style="font-size:24px" aria-hidden="true"></i>
+
+                   {% if project.owner.check %}
+                   <p class="text-white">
+                       <span class="bg-success text-white">Open</span></p></li>
+                    {% else %}
+                      <p class="text-white">
+                        <span class="bg-danger text-white">Closed</span>
+                      </p></li>
+                      {% endif %}
+                     <li><i class="fa fa-cart-arrow-down" style="font-size:24px" aria-hidden="true"></i>
+                    <span>Add to cart</span></li>
+
+                   <li><i class="fa fa-toggle-on" style="font-size:24px" aria-hidden="true"></i>
+                   {% if project.check %}
+                      <p class="text-white">
+                            <span class="bg-success text-white">Available</span></p></li>
+                      {% else %}
+                      <p class="text-white">
+                        <span class="bg-danger text-white">Not Available</span>
+                      </p></li>
+                      {% endif %}
+
+                    </ul>
+
+              </div>
+            <div class="content">
+            <div class="productName">
+                 <a href="{% url 'project' project.id %}" class="project">
+                <h3>{{project.title}}</h3></a>
+                <h2>&#8377; {{project.price}} </h2>
+                <span><i class="fa fa-thumbs-up" style="font-size:36px;color:#469f47;"></i>
+                <strong class="float-right text-info">{{ project.liked.all.count }} likes</strong></span>
+
+                   <h3 style="color:#d94562;font-weight: 600;">{{project.owner.shop_name}}</h3>
+                   <p style="color:#ff0162; font-style:italic;font-weight:500;">{{project.owner.pin_number}} ,<span style="color:#6f01ff; font-style:italic">
+                    {{project.owner.state}}</span> </p>
+                   {% if project.add_note %}
+                  <p>{{project.add_note}}</p>
+                  {% endif %}
+                    <p class="project--rating mb-2">
+                      <span style="font-weight: bold;">
+                        <p class="title text-warning">{{project.percentage|slice:"4"}}%</span> PositiveFeedback ({{project.vote_total}} vote{{project.vote_total | pluralize:"s"}})</p>
+            </div>
+                        <hr>
+
+          <div class="price_rating">
+                {% if project.owner.profile_image %}
+            <img src="{{project.owner.profile_image.url}}" class="rounded-circle" style="height:42px; width:42px;"
+              class="img-fluid border rounded-left border-lg border-0"
+              alt="portfolio">
+              {% else %}
+            <img src="#" alt="no image available" />
+            {% endif %}
+            <a class="project__author text-dark"
+            href=" {{ project.owner.get_absolute_url }}"> <p class="title" style="color: #2562aa;font-weight:500"> {{project.owner.address|capfirst}}</p></a>
+          </div>
+        </div>
+        </div>
+          {% endfor %}
+      </div>
+    </div>
+  </div>
+  <div class="spinner-border text-info" style="width: 5rem; height: 5rem" role="status">
+    <span class="sr-only">Loading...</span>
+  </div>
+  {% if projects.has_next %}
+  <a class="infinite-more-link" href="?page={{ projects.next_page_number }}"></a>
+  {% endif %}
+  </section>
+  <input type="hidden" id="authinput" value="{{sess}}">
+  <!-- {% include 'pagination.html' with querysets=projects custom_range=custom_range %} -->
+</main>
+<script src="{% static 'js/jquery.waypoints.min.js' %}"></script>
+<script src="{% static 'js/infinite.min.js' %}"></script>
+
+<script>
+  //Get the button
+  var mybutton = document.getElementById("myBtn");
+
+  // When the user scrolls down 20px from the top of the document, show the button
+  window.onscroll = function() {scrollFunction()};
+
+  function scrollFunction() {
+    if (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) {
+      mybutton.style.display = "block";
+    } else {
+      mybutton.style.display = "none";
+    }
+  }
+
+  // When the user clicks on the button, scroll to the top of the document
+  function topFunction() {
+    document.body.scrollTop = 0;
+    document.documentElement.scrollTop = 0;
+  }
+  </script>
+<script>
+const boot = () => {
+  localStorage.removeItem('auth')
+  const sessionId = document.getElementById('authinput').value
+  console.log(sessionId);
+  if(sessionId &&  sessionId !== "None" ){
+    localStorage.setItem('auth',JSON.stringify({sessionId}))
+  }
+}
+boot()
+
+const handlePopupShowHide = (bool = false) => {
+    console.log({bool});
+    if (bool) {
+     popup.style.display = "grid";
+    }else{
+      popup.style.display = "none";
+    }
+  };
+
+
+  const popup = document.querySelector(".popup");
+  const PopupCloseBtn = document.querySelector("#close__search_pop");
+
+  PopupCloseBtn.addEventListener('click',() => handlePopupShowHide(false) )
+  let isSeen = false;
+  window.addEventListener('scroll', (e) => {
+
+    const pageY = Math.round(window.scrollY);
+    console.log({pageY})
+    if(pageY > 1000 && !isSeen){
+     let auth = false;
+    JSON.parse(localStorage.getItem('auth')) ? auth = true : auth = false;
+    console.log({auth})
+
+    if(auth){
+      handlePopupShowHide(false)
+    }else{
+      handlePopupShowHide(true)
+      isSeen = true
+    }
+    }
+
+  })
+</script>
+
+<script>
+  var check = function() {
+  if (document.getElementById('password').value ==
+    document.getElementById('confirm_password').value) {
+    document.getElementById('message').style.color = 'green';
+    document.getElementById('message').innerHTML = 'matching';
+  } else {
+    document.getElementById('message').style.color = 'red';
+    document.getElementById('message').innerHTML = 'not matching';
+  }
+}
+</script>
+<script>
+  function validateForm() {
+     var formField = document.forms["myform"]["pin_number"].value;
+     if (formField == "" || x == null) {
+        alert("Pin Number must be filled out");
+        return false;
+     }
+  }
+</script>
+{% endblock content %}

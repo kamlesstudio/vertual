@@ -1,0 +1,125 @@
+{% extends 'main.html' %}
+{% load static %}
+<style>
+  .text-3d {
+   
+    top: 50%; 
+    right: 50%;
+    transform: translate(50%,-50%);
+    
+    font-family: bold 52px Helvetica, Arial, Sans-Serif ;
+    font-size: 220px;
+    font-weight: 300;
+    color: #f5f5f5;
+    text-shadow: 1px 1px 1px #919191,
+        1px 2px 1px #919191,
+        1px 3px 1px #919191,
+        1px 4px 1px #919191,
+        1px 5px 1px #919191,
+        1px 6px 1px #919191,
+        1px 7px 1px #919191,
+        1px 8px 1px #919191,
+        1px 9px 1px #919191,
+        1px 10px 1px #919191,
+    1px 18px 6px rgba(16,16,16,0.4),
+    1px 22px 10px rgba(16,16,16,0.2),
+    1px 25px 35px rgba(16,16,16,0.2),
+    1px 30px 60px rgba(16,16,16,0.4);
+}
+</style>
+{% block content %}
+
+{% if  page == 'register' %}
+
+<div class="auth" style="margin-top: 170px;">
+    <div class="card">
+      <div class="auth__header text-center">
+        <a href="/">
+          <h1 class="text-3d float-left">VerB</h1>
+        </a>
+        <h3>Register an Account</h3>
+        <p>Create a new user account</p>
+      </div>
+
+      <form action="{% url 'register' %}" method = "POST" class="form auth__form">
+        {% csrf_token %}
+        
+      
+        {% for field in form %}
+        <div class="form__field">
+            <label for="formInput#text">{{field.label}} </label>
+            {{field}}
+
+             {% if field.help_text %}
+                <small>{{field.help_text}}</small>
+            {% endif %} 
+
+            {% for error in field.errors %}
+            <p style="color:red;">{{error}}</p>
+            {% endfor %}
+
+          </div>
+        {% endfor %} 
+        <div class="auth__actions">
+          <input class="btn btn--sub btn--lg" type="submit" value="Sign  In" />
+        </div>
+      </form>
+      <div class="auth__alternative">
+        <p>Already have an Account?</p>
+        <a href="{% url 'login' %}">Log In</a>
+      </div>
+    </div>
+  </div>
+
+
+{% else %}
+<div class="auth">
+    <div class="card">
+      <div class="auth__header text-center">
+        <a href="/">
+          <h1 class="text-3d float-left mt-5">VerB</h1>
+        </a>
+        <h3>Account Login</h3>
+        <p>In Vertual Bazzar, Welcome Back!</p>
+      </div>
+
+      <form action="{% url 'login' %}" method = "POST" class="form auth__form">
+        {% csrf_token %}
+        <!-- Input:username -->
+        <div class="form__field">
+          <label for="formInput#text">Email : </label>
+          <input
+            class="input input--text"
+            id="formInput#text"
+            type="text"
+            name="email"
+            placeholder="Enter your username..."
+          />
+        </div>
+
+        <!-- Input:Password -->
+        <div class="form__field">
+          <label for="formInput#password">Password: </label>
+          <input
+            class="input input--password"
+            id="formInput#passowrd"
+            type="password"
+            name="password"
+            placeholder="••••••••"
+          />
+        </div>
+        <div class="auth__actions">
+          <input class="btn btn--sub btn--lg" type="submit" value="Log In" />
+          <a href="{% url 'reset_password' %}">Forget Password?</a>
+        </div>
+      </form>
+      <div class="auth__alternative">
+        <p>Don’t have an Account?</p>
+        <a href="{% url 'register' %}">Sign Up</a>
+      </div>
+    </div>
+  </div>
+{% endif %}
+
+
+{% endblock %}

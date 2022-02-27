@@ -1,0 +1,203 @@
+{% extends 'main.html' %}
+{% load static %}
+
+
+{% block content %}
+
+<style>
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: rgb(170, 169, 169);
+      margin: 0;
+      padding: 0;
+    }
+
+    .navbar {
+      display: flex;
+      width: 100%;
+      box-shadow: 0 0 5px black;
+      text-align: center;
+      height: 40px;
+      justify-content: center;
+      align-items: center;
+      font-size: 25px;
+    }
+
+    .wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      background: #fbfbfb;;
+      margin: 10px auto;
+      padding: 5px 30px;
+      width: 800px;
+      box-shadow: 0 0 5px black;
+    }
+
+    .hr {
+      display: flex;
+      align-items: center;
+    }
+
+    hr {
+      width: 30px;
+      height: 1px;
+      background: black;
+      margin: 0 15px;
+    }
+
+    h2 {
+      font-size: 25px;
+      font-weight: normal;
+      
+    }
+
+    .mission-txt {
+      font-size: 18px;
+      font-weight: 500px;
+      font-style: italic;
+      margin-top: 0;
+    }
+
+    div img {
+      width: 200px;
+      filter: drop-shadow(0 10px 5px black);
+      margin-bottom: 20px;
+    }
+
+    p {
+      text-align: justify;
+    }
+
+    .faculties {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .unit {
+      margin: 25px;
+      width: 200px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .unit img {
+      border-radius: 100px;
+      width: 150px;
+      height: 150px;
+      margin-bottom: 10px;
+    }
+
+    .unit p {
+      text-align: left;
+      margin: 2px;
+    }
+
+    .unit p:first-of-type {
+      font-weight: bolder;
+      margin-bottom: 5px;
+    }
+
+    @media screen and (max-width:820px) {
+      .wrapper {
+        width: 80%;
+        padding: 5px 30px;
+      }
+    }
+
+
+
+</style>
+  <!-- place your nav bar here -->
+
+  <div class="container">
+
+    <div class="wrapper">
+      <div class="hr">
+        <hr>
+        <p style="font-weight:600; font-size:2.5rem;">"VerB"</p>
+        <hr>
+      </div>
+
+      <p class="mission-txt" style="color:rgb(243, 124, 12); text-decoration: underline;">"To share information about your products / services in digital world"</p>
+        <p style="font-weight:600; color:red;"> Email-Us :<a href=""></a>vertualbazaar@gmail.com</p>
+    </div>
+
+    <div class="wrapper">
+
+      <div>
+
+       <img src="{% static 'icon.jpg' %}" alt="">
+        <h2 style="text-decoration: underline;">About VerB</h2>
+        <p style="font-weight: 500;color:rgb(35, 46, 146);">"vertualbazaar.com" or "VerB" is an e-advertisement platform that enables its user to advertise about something to masses at almost negligible cost. It enables real time interaction between service provider and service seeker or in other words it enables vendors to upload their products or services so that anyone in that locality may find details about it such as brief description about it, real time status of products/ services being available or not-available, cost of product or service, name and address of shop, live status of shop being open or close, other customers reviews about product or service etc..
+
+            So "VerB" makes consumers/ customers aware about the products/ services available in nearby market to them and help in making informed decision by the service seeker.</p>
+
+
+
+            <br>
+            <br>
+           <p style="font-style:italic;color:rgb(13, 148, 81); font-weight: 500;"> "VerB" also help the vendors/ shop owners or service providers to advertise in local market at almost negligible cost that ultimately reduce the advertisement cost associated with the product or service drastically. Any new vendor can advertise their product/ service at a reasonable cost anywhere. In short, it is a kind of initiative to promote “Vocal for Local”. It will also reduce the initial cost involve in installing a business or service facility since it will enable the vendors to advertise about their business before investing in renting a shop and advertisement as “VerB” make them advertise in whole of the targeted locality with a single click of ‘paid promotion’ button. With the help of “VerB” anyone can advertise in whole of the locality.
+
+            "VerB" will also reduce the expenses involved in searching of a product as it will provide all the relevant information about the product/ service that reduces the time involved in searching for a product/ service near you. Other than that it will also reduce the unnecessary wandering of the people in search of a product/ service that ultimately reduces the expenses on fuel oil and reduce the traffic on streets.
+            Another indirect benefit of “VerB” is related to the environmental pollution triggered by the hoardings on the streets/ poles etc. As these hoardings are made up of plastics hence after few weeks these plastic hoardings tear off and causes pollution.</p>
+
+
+
+          <br>
+            <h5 style="color:rgb(243, 124, 12); font-weight: 500;">
+                In short "VerB" provides :-
+</h5><br>
+            <p style="font-style:italic; color:rgb(35, 46, 146);">. Real time information about product/ services in the searched locality.</p>
+            <p style="font-style:italic;color:rgb(35, 46, 146);">. It may help in reducing traffic in cities as you come to know real time information about what you are searching.</p>
+            <p style="font-style:italic;color:rgb(35, 46, 146);">. It help in reducing cost involved in advertisement leading to reduce in cost  of product/ service.</p>
+            <p style="font-style:italic;color:rgb(35, 46, 146);">. Reduces cost involved in searching of a product/ service i.e. less travelling and hence less expenses on fuel.</p>
+            <p style="font-style:italic;color:rgb(35, 46, 146);">. It may help in reducing environmental pollution. </p>
+
+      </div>
+    </div>
+
+
+    <div class="wrapper">
+      <h2 style="color:rgb(243, 124, 12);text-transform: uppercase;">Our Core Team</h2>
+      <div class="faculties">
+        <div class="unit">
+          <img src="{% static 'raj.jpg' %}" alt="">
+          <p style="color:rgb(28, 58, 16);">Rajeev Kumar Singh</p>
+           <p style="color:rgb(28, 58, 16);"> Co-founder: <span style="font-weight:500;color:rgb(255, 102, 0);">VerB</span> </p>
+          <p>( M-Tech, IIT Delhi )</p>
+
+        </div>
+        <div class="unit">
+          <img src="{% static 'babuu.jpg' %}" alt="">
+          <p style="color:rgb(28, 58, 16);">Kamlesh Kumar Srivastava</p>
+            <p style="color:rgb(28, 58, 16);">Co-founder: <span style="font-weight:500;color:rgb(255, 102, 0);">VerB</span></p>
+          <p>( BA, MGKVP )</p>
+
+
+        </div>
+        <div class="unit">
+          <img src="{% static 'muns.jpg' %}" alt="">
+          <p style="color:rgb(28, 58, 16);">Yogendra Singh</p>
+           <p style="color:rgb(28, 58, 16);"> Co-founder: <span style="font-weight:500; color:rgb(255, 102, 0);">VerB</span></p>
+          <p>( BTech, Dr.KNMIET )</p>
+
+        </div>
+        <div class="unit">
+          <img src="{% static 'kk1.jpg' %}" alt="">
+          <p style="color:rgb(28, 58, 16);">Kamlesh Yadav</p>
+           <p style="color:rgb(28, 58, 16);"> Co-founder: <span style="font-weight:500;color:rgb(255, 102, 0);">VerB</span></p>
+          <p>( M-Tech, Thapar University, Patiala )</p>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+{% endblock %}
