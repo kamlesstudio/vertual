@@ -23,9 +23,9 @@ print(BASE_DIR)
 SECRET_KEY = 'django-insecure-x5pq+y_thf0x=vuni*lru3j@kw!oe=ztl8hw83w&6i+qc1pc!^'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = ['localhost','127.0.0.1','www.vertualbazaar.com','vertualbazaar.com']
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
